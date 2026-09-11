@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1e5ab4">
+<meta name="description" content="A comprehensive educational guide for beginners and programmers on Virtual Machines.">
+<title>Virtual Machines — From Zero to Professional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-content">
+    <a href="#" class="header-logo">📘 Virtual Machines</a>
+    <div class="header-actions">
+      <div class="lang-switch">
+        <a href="index.html">العربية</a>
+        <span class="lang-divider">|</span>
+        <span class="lang-active">English</span>
+      </div>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+        <span class="theme-icon">🌙</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="progress-bar"></div>
+<button id="back-to-top" title="Back to top">↑</button>
+
+<div class="page">
+<div class="cover">
+  <span class="icon-vm">💻</span>
+  <h1>Virtual Machines</h1>
+  <p class="subtitle">From Zero to Professional</p>
+  <p class="subtitle">Understanding, Creating, Using, Networking, Security Isolation, and Practical Applications</p>
+  <p class="tagline">A comprehensive educational guide for beginners and programmers</p>
+</div>
+
+<div class="intro-message">
+  <strong>Message to the Reader:</strong><br>
+  The goal of this book is not to teach you how to enter the world of cybercrime, but to help you understand a powerful technology that will make you a better programmer, more aware of information security, and capable of building real development and testing environments. Understanding technology is the first step toward using it responsibly and legally.
+</div>
+
+<div class="toc">
+  <h2>📑 Table of Contents</h2>
+  <ol>
+    <li><a href="#ch0">Introduction: Why learn Virtual Machines?</a></li>
+    <li><a href="#ch1">What is a Virtual Machine?</a></li>
+    <li><a href="#ch2">How does it work internally?</a></li>
+    <li><a href="#ch3">VirtualBox: Your Gateway</a></li>
+    <li><a href="#ch4">Creating your first Virtual Machine</a></li>
+    <li><a href="#ch5">Installing Software</a></li>
+    <li><a href="#ch6">Snapshots and Backups</a></li>
+    <li><a href="#ch7">Networking inside VMs</a></li>
+    <li><a href="#ch8">IP, MAC, and Device Information</a></li>
+    <li><a href="#ch9">Security Isolation</a></li>
+    <li><a href="#ch10">Windows Sandbox</a></li>
+    <li><a href="#ch11">Multiple VMs and Nested Virtualization</a></li>
+    <li><a href="#ch12">VMs for Programming</a></li>
+    <li><a href="#ch13">VMs and Nexmart</a></li>
+    <li><a href="#ch14">Cybersecurity Labs</a></li>
+    <li><a href="#ch15">Tor and Dark Web — Awareness</a></li>
+    <li><a href="#ch16">The Risks of Cybercrime</a></li>
+    <li><a href="#ch17">Practical Lab Project</a></li>
+    <li><a href="#ch18">Common Mistakes</a></li>
+    <li><a href="#ch19">Frequently Asked Questions (FAQ)</a></li>
+    <li><a href="#glossary">Glossary of Terms</a></li>
+    <li><a href="#summary">Summary</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch0">Introduction: Why learn Virtual Machines?</h1>
+
+<p>Imagine you are learning programming and building a project called <strong>Nexmart</strong> — a real e-commerce store. You write the Backend using Node.js, Express, and MongoDB. Everything works on your device. But what if you wanted to try setting up a real Linux server without risking your device? What if you wanted to test a program you don't trust? What if you wanted to learn networking without buying additional hardware?</p>
+
+<p>Here comes the role of the <strong>Virtual Machine (VM)</strong>.</p>
+
+<h2>What will I personally gain?</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Benefit</th><th>Explanation</th></tr>
+  <tr><td>Understanding Linux</td><td>You will run Ubuntu or any distro in a safe environment</td></tr>
+  <tr><td>Understanding Networking</td><td>IP, Router, DNS, NAT — practically, not just theoretically</td></tr>
+  <tr><td>Understanding Servers</td><td>How the server that will host your app works</td></tr>
+  <tr><td>Preparing for DevOps</td><td>Docker, Kubernetes, CI/CD all rely on virtualization</td></tr>
+  <tr><td>Understanding Cybersecurity</td><td>Isolation and vulnerability testing in a legal environment</td></tr>
+  <tr><td>Isolated Development Environments</td><td>A clean environment for the Nexmart project, separate from your files</td></tr>
+  <tr><td>Testing Projects</td><td>Trying new configurations without fear of ruining your system</td></tr>
+</table>
+</div>
+
+<div class="tip">
+  <strong>✅ The Truth:</strong> Most professional Backend developers work daily with virtual machines or containers without even realizing it. Learning it now = readiness for the job market.
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch1">Chapter 1: What is a Virtual Machine?</h1>
+
+<h2>1.1 What is a real computer?</h2>
+
+<p>A physical computer is the device you touch with your hands. It consists of three basic layers:</p>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Component</th><th>Description</th><th>Example</th></tr>
+  <tr><td><strong>Hardware</strong></td><td>Physical parts</td><td>CPU, Memory, Disk, Screen</td></tr>
+  <tr><td><strong>Operating System</strong></td><td>The software that manages the hardware</td><td>Windows, Linux, macOS</td></tr>
+  <tr><td><strong>Software</strong></td><td>The applications you use</td><td>Chrome, VS Code, Games</td></tr>
+</table>
+</div>
+
+<h2>1.2 What is a Virtual Machine?</h2>
+
+<p>A <strong>Virtual Machine (VM)</strong> is a complete computer — with a CPU, memory, hard disk, network, and operating system — but it is <strong>not a physical piece of hardware</strong>. It is a program running inside a real computer, behaving exactly as if it were an independent computer.</p>
+
+<div class="note">
+  <strong>🏠 Everyday Analogy:</strong><br>
+  Imagine you live in a large house. Inside this house, you built a completely independent room — with its own door, key, and furniture. This room is part of the house, but it is isolated from it.<br><br>
+  <strong>Technical Explanation:</strong> A virtual machine is an emulation program that creates an isolated environment simulating computer hardware. When the operating system runs inside the virtual machine, it thinks it is running on real hardware.
+</div>
+
+<h2>1.3 Basic Terminology</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Term</th><th>Simple Explanation</th></tr>
+  <tr><td><strong>Host</strong></td><td>The physical computer running the virtualization software</td></tr>
+  <tr><td><strong>Guest</strong></td><td>The operating system running inside the virtual machine</td></tr>
+  <tr><td><strong>Virtual Machine</strong></td><td>The software-emulated computer</td></tr>
+  <tr><td><strong>Hypervisor</strong></td><td>The software that creates and manages virtual machines</td></tr>
+</table>
+</div>
+
+<p>A <strong>Hypervisor</strong> is like a "building manager" that distributes resources (electricity, water) to the different rooms. There are two types:</p>
+
+<ul>
+  <li><strong>Type 1 (Bare-metal):</strong> Runs directly on the hardware — like VMware ESXi and Microsoft Hyper-V.</li>
+  <li><strong>Type 2 (Hosted):</strong> Runs on top of an operating system — like Oracle VirtualBox and VMware Workstation.</li>
+</ul>
+
+<h2>1.4 Practical Example</h2>
+
+<p><strong>Real Laptop (Host):</strong></p>
+<ul>
+  <li>Windows 11</li>
+  <li>24GB RAM</li>
+  <li>Intel Core i5 12th Gen</li>
+</ul>
+
+<p><strong>VM inside it (Guest):</strong></p>
+<ul>
+  <li>Windows 11</li>
+  <li>8GB RAM</li>
+  <li>4 CPU cores</li>
+  <li>80GB virtual disk</li>
+</ul>
+
+<p>When the VM is powered on, 8GB of the 24GB is <strong>allocated</strong> to the virtual machine. The remaining 16GB is for the Host. This allocation is <strong>temporary</strong> — when the VM is closed, the memory is fully returned to the Host.</p>
+
+<div class="diagram">
+  <div class="box accent">HOST COMPUTER (Windows 11)</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">VirtualBox (Hypervisor)</div>
+  <div class="arrow">↓</div>
+  <div class="box">Virtual Machine</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">Windows 11 Guest</div>
+  <div class="arrow">↓</div>
+  <div class="box">Applications inside the VM</div>
+</div>
+
+<h2>1.5 Is the VM a real computer?</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Question</th><th>Answer</th></tr>
+  <tr><td>Does it have RAM?</td><td>Yes — but <strong>virtual RAM</strong> allocated from the Host's memory</td></tr>
+  <tr><td>Does it have a CPU?</td><td>Yes — virtual cores from the Host's CPU</td></tr>
+  <tr><td>Does it have a Hard Disk?</td><td>Yes — but it is a <strong>virtual disk</strong> (a file on the Host's disk)</td></tr>
+  <tr><td>Does it have a Network Card?</td><td>Yes — a <strong>virtual adapter</strong> emulated in software</td></tr>
+  <tr><td>Does it have an Operating System?</td><td>Yes — a complete operating system</td></tr>
+</table>
+</div>
+
+<div class="quiz">
+  <h3>🧠 Test Your Understanding</h3>
+  <details>
+    <summary>Q1: If I have a real Windows and a virtual Windows, which one is called the Host?</summary>
+    <p>The real Windows is the Host because it is the physical device running the virtualization software.</p>
+  </details>
+  <details>
+    <summary>Q2: Is the VM's RAM real or fake?</summary>
+    <p>It's real memory allocated from the Host, but it's "virtual" from the VM's perspective.</p>
+  </details>
+  <details>
+    <summary>Q3: What is the difference between Host and Guest?</summary>
+    <p>Host = The physical computer. Guest = The operating system running inside the VM.</p>
+  </details>
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch2">Chapter 2: How does the Virtual Machine work internally?</h1>
+
+<h2>2.1 Virtualization</h2>
+<p><strong>Virtualization</strong> is the technology that allows running more than one operating system on the same hardware. The Hypervisor distributes resources among the virtual systems.</p>
+
+<h2>2.2 CPU Virtualization</h2>
+<p>The real CPU contains cores. When you give a VM "4 CPU cores", you allow it to use 4 cores from the Host's CPU. The Hypervisor schedules the usage of these cores.</p>
+
+<div class="note">
+  <strong>Note:</strong> If the processor has 8 cores, and you gave the VM 4, it does not mean the Host will be left with only a 4-core processor. It means the VM is <em>authorized</em> to use up to 4 cores when needed.
+</div>
+
+<h2>2.3 Intel VT-x / AMD-V</h2>
+<p>To achieve good performance, modern processors need <strong>Hardware Virtualization</strong> — a built-in feature in the CPU that accelerates virtual machines:</p>
+<ul>
+  <li><strong>Intel VT-x:</strong> Intel's technology</li>
+  <li><strong>AMD-V:</strong> AMD's technology</li>
+</ul>
+<p>If this feature is not enabled in the <strong>BIOS/UEFI</strong>, virtual machines will run extremely slowly or won't run at all.</p>
+
+<h2>2.4 Virtual Disk</h2>
+<p>The <strong>Virtual Disk</strong> is a large file on the Host's disk that contains all the VM's data. There are several types:</p>
+<ul>
+  <li><strong>VDI:</strong> The default format in VirtualBox</li>
+  <li><strong>VHD/VHDX:</strong> From Microsoft (Hyper-V)</li>
+  <li><strong>VMDK:</strong> From VMware</li>
+</ul>
+<p>Two allocation modes:</p>
+<ul>
+  <li><strong>Dynamically Allocated:</strong> Grows gradually as needed (best for beginners)</li>
+  <li><strong>Fixed Size:</strong> Fully allocated from the start (faster, but takes space immediately)</li>
+</ul>
+
+<h2>2.5 Resource Allocation Table</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Resource</th><th>Physical Device</th><th>What we give the VM</th><th>Impact</th></tr>
+  <tr><td>RAM</td><td>24GB</td><td>8GB</td><td>16GB remains for the Host</td></tr>
+  <tr><td>CPU</td><td>8 cores</td><td>4 cores</td><td>Dynamic sharing</td></tr>
+  <tr><td>Disk</td><td>512GB SSD</td><td>80GB</td><td>VDI file on the disk</td></tr>
+  <tr><td>GPU</td><td>Intel Iris Xe</td><td>Software VMSVGA</td><td>Games may not run well</td></tr>
+</table>
+</div>
+
+<h2>2.6 Does running a VM make the computer slower?</h2>
+<p><strong>Yes, temporarily.</strong> When the VM is running: a portion of RAM is reserved, some cores are busy, and the GPU may be slower.</p>
+<p><strong>When does the computer become slow?</strong></p>
+<ul>
+  <li>If you give the VM more than 60% of the Host's memory.</li>
+  <li>If you run a heavy VM on a device with low memory.</li>
+  <li>If the disk is an HDD rather than an SSD.</li>
+</ul>
+
+<div class="warning">
+  <strong>⚠️ Warning:</strong> Do not run a heavy VM on a device with less than 8GB of RAM — the experience will be painful.
+</div>
+
+<div class="quiz">
+  <h3>🧠 Test Your Understanding</h3>
+  <details>
+    <summary>Q1: Why do we need to enable Intel VT-x?</summary>
+    <p>Because it significantly accelerates VM performance through direct hardware support.</p>
+  </details>
+  <details>
+    <summary>Q2: What is the difference between Dynamic and Fixed Disk?</summary>
+    <p>Dynamic grows gradually as needed, while Fixed allocates the full space from the beginning.</p>
+  </details>
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch3">Chapter 3: VirtualBox — Your Gateway to the Virtual World</h1>
+
+<h2>3.1 What is VirtualBox?</h2>
+<p><strong>Oracle VirtualBox</strong> is a free, open-source virtualization software from Oracle. It allows you to create and run virtual machines on your computer.</p>
+
+<h2>3.2 Why VirtualBox?</h2>
+<div class="table-wrap">
+<table>
+  <tr><th>Feature</th><th>Detail</th></tr>
+  <tr><td>Completely Free</td><td>Open-source under the GPL license</td></tr>
+  <tr><td>Cross-Platform</td><td>Windows, Linux, macOS</td></tr>
+  <tr><td>Beginner-Friendly</td><td>Simple graphical user interface</td></tr>
+  <tr><td>Huge Community</td><td>Endless support and resources</td></tr>
+  <tr><td>Supports Many Systems</td><td>Windows, Linux, BSD, Solaris</td></tr>
+</table>
+</div>
+
+<h2>3.3 Downloading from the Official Source</h2>
+<p>The only reliable official link:</p>
+<p><a href="https://www.virtualbox.org/wiki/Downloads" target="_blank" rel="noopener">https://www.virtualbox.org/wiki/Downloads</a></p>
+
+<div class="warning">
+  <strong>⚠️ Security Warning:</strong> Do not download VirtualBox from random websites. Use the official link only.
+</div>
+
+<h2>3.4 Installation on Windows</h2>
+<ol>
+  <li>Go to the official link above</li>
+  <li>Select <code>Windows hosts</code> to download the <code>.exe</code> file</li>
+  <li>Run the installer</li>
+  <li>Follow the instructions (Next → Next → Install)</li>
+  <li>After installation, the VirtualBox icon will appear in the Start menu</li>
+</ol>
+
+<div class="tip">
+  <strong>💡 Tip:</strong> Also download the <strong>VirtualBox Extension Pack</strong> from the same page for USB 2.0/3.0 support.
+</div>
+
+<h2>3.5 VirtualBox Components</h2>
+<ul>
+  <li><strong>VirtualBox Manager:</strong> The graphical user interface</li>
+  <li><strong>VBoxManage:</strong> Command-line tool for automation</li>
+  <li><strong>VBoxSDL:</strong> A simple interface</li>
+  <li><strong>Extension Pack:</strong> Optional add-on package</li>
+</ul>
+
+<hr class="chapter-divider">
+
+<h1 id="ch4">Chapter 4: Creating your first Virtual Machine from Scratch</h1>
+
+<h2>4.1 Detailed Steps</h2>
+
+<p><strong>1. Open VirtualBox</strong> — the main interface will appear.</p>
+<p><strong>2. Click New</strong> — the creation wizard begins.</p>
+<p><strong>3. Enter the Name</strong> — Example: <code>Windows 11 VM</code>.</p>
+<p><strong>4. Select the Type</strong> — Type: <code>Microsoft Windows</code>, Version: <code>Windows 11 (64-bit)</code>.</p>
+<p><strong>5. Allocate Memory (RAM)</strong> — Minimum 4GB, ideally 8GB.</p>
+<p><strong>6. Allocate Processor (CPU)</strong> — 2 to 4 cores.</p>
+<p><strong>7. Create a Virtual Hard Disk</strong>:</p>
+<ul>
+  <li>Select <code>Create a Virtual Hard Disk Now</code></li>
+  <li>Type: <code>VDI (VirtualBox Disk Image)</code></li>
+  <li>Size: <code>80GB</code> with Dynamic Allocation</li>
+</ul>
+<p><strong>8. Mount the ISO File</strong> — From Settings → Storage, select the ISO file.</p>
+<p><strong>9. Click Start</strong> — the installation begins.</p>
+<p><strong>10. Follow the installation steps</strong> as if you were installing it on a real computer.</p>
+<p><strong>11. Install Guest Additions</strong> — From Devices → Insert Guest Additions CD Image.</p>
+<p><strong>12. Restart</strong> — After installation, your VM is ready.</p>
+
+<h2>4.2 Difference Between Programs on Host and Guest</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Question</th><th>Answer</th></tr>
+  <tr><td>If I install Chrome inside the VM, does it appear on the real desktop?</td><td><strong>No</strong> — it is isolated</td></tr>
+  <tr><td>If I delete Chrome from the VM, is the Host affected?</td><td><strong>No</strong> — they are independent</td></tr>
+  <tr><td>Are files shared?</td><td>Only with <strong>Shared Folders</strong> enabled</td></tr>
+  <tr><td>Does the VM consume Host resources?</td><td><strong>Yes</strong> — RAM, CPU, Disk</td></tr>
+</table>
+</div>
+
+<hr class="chapter-divider">
+<h1 id="ch5">Chapter 5: Installing Software Inside the Virtual Machine</h1>
+
+<h2>5.1 Can I install any software?</h2>
+<p><strong>Yes.</strong> Inside the VM, you can install any software just as if you were on a physical computer:</p>
+<ul>
+  <li>Chrome / Firefox</li>
+  <li>VS Code</li>
+  <li>Node.js</li>
+  <li>Git</li>
+  <li>MongoDB</li>
+  <li>Games (may run slowly)</li>
+  <li>Development Tools</li>
+  <li>Testing Software</li>
+  <li>Untrusted Programs (this is where the value lies!)</li>
+</ul>
+
+<h2>5.2 Practical Example</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Environment</th><th>Content</th></tr>
+  <tr><td><strong>Real Windows (Host)</strong></td><td>VS Code + Original Nexmart Files</td></tr>
+  <tr><td><strong>Windows VM</strong></td><td>Untrusted experimental software</td></tr>
+</table>
+</div>
+
+<h2>5.3 When do you actually need a VM?</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Scenario</th><th>Do you need a VM?</th></tr>
+  <tr><td>Learning Node.js for the first time</td><td><strong>No</strong> — start on your local machine</td></tr>
+  <tr><td>Want to try Linux</td><td><strong>Yes</strong> — VM is perfect</td></tr>
+  <tr><td>Testing MongoDB with different configurations</td><td><strong>Yes</strong> — better isolation</td></tr>
+  <tr><td>Nexmart project in early development</td><td>Not necessarily</td></tr>
+  <tr><td>Simulating a Production environment</td><td><strong>Yes</strong> — VM or Docker</td></tr>
+</table>
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch6">Chapter 6: Snapshots and Backups</h1>
+
+<h2>6.1 What is a Snapshot?</h2>
+<p>A <strong>Snapshot</strong> is a saved image of the VM's state at a specific moment in time. Like "saving a game" — you can revert to it later.</p>
+
+<div class="note">
+  <strong>🎮 Analogy:</strong> Imagine you are playing a difficult game. You reach an advanced level, and you save. Then you lose. What do you do? You load the previous save. A Snapshot is exactly this — but for an entire virtual machine.
+</div>
+
+<h3>Practical Example:</h3>
+<ol>
+  <li>You created a clean Windows VM.</li>
+  <li>You took a Snapshot named <code>Clean Windows</code>.</li>
+  <li>You installed 20 programs and the system crashed.</li>
+  <li>You clicked <strong>Restore</strong> → The system reverted to the clean state in seconds!</li>
+</ol>
+
+<h2>6.2 Difference Between Snapshot and Backup</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Feature</th><th>Snapshot</th><th>Backup</th></tr>
+  <tr><td>What does it do?</td><td>Temporarily saves VM state</td><td>Fully copies the VM</td></tr>
+  <tr><td>Where is it stored?</td><td>Next to the VM files</td><td>In a separate location</td></tr>
+  <tr><td>Purpose</td><td>Quick rollback</td><td>Disaster recovery</td></tr>
+  <tr><td>Duration</td><td>Short-term</td><td>Long-term</td></tr>
+  <tr><td>Protects against disk failure?</td><td><strong>No</strong></td><td><strong>Yes</strong></td></tr>
+</table>
+</div>
+
+<div class="danger">
+  <strong>🚨 Common Mistake:</strong> Believing that a Snapshot replaces a Backup. If the hard disk fails, the Snapshot is lost with it.
+</div>
+
+<h2>6.3 Difference Between Snapshot, Clone, Export, and Import</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Operation</th><th>Description</th></tr>
+  <tr><td><strong>Snapshot</strong></td><td>An image of the VM's state at a specific moment</td></tr>
+  <tr><td><strong>Restore</strong></td><td>Reverting to a previous Snapshot</td></tr>
+  <tr><td><strong>Clone</strong></td><td>A complete, independent copy of the VM</td></tr>
+  <tr><td><strong>Backup</strong></td><td>A full copy stored externally</td></tr>
+  <tr><td><strong>Export</strong></td><td>Exporting as an OVF/OVA file</td></tr>
+  <tr><td><strong>Import</strong></td><td>Importing an OVF/OVA file</td></tr>
+</table>
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch7">Chapter 7: Networking inside VMs</h1>
+
+<h2>7.1 Core Concepts</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Term</th><th>Explanation</th></tr>
+  <tr><td><strong>Network</strong></td><td>A group of connected devices</td></tr>
+  <tr><td><strong>IP Address</strong></td><td>A unique digital address for each device</td></tr>
+  <tr><td><strong>Private IP</strong></td><td>Internal address (e.g., 192.168.x.x)</td></tr>
+  <tr><td><strong>Public IP</strong></td><td>The address websites see</td></tr>
+  <tr><td><strong>Router</strong></td><td>Routes data between networks</td></tr>
+  <tr><td><strong>MAC Address</strong></td><td>Unique address for the network interface card</td></tr>
+  <tr><td><strong>DNS</strong></td><td>Translates domain names to IPs</td></tr>
+  <tr><td><strong>Gateway</strong></td><td>The exit gate from a network</td></tr>
+</table>
+</div>
+
+<h2>7.2 Network Modes in VirtualBox</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Mode</th><th>Internet</th><th>Host</th><th>VM↔VM</th><th>Use Case</th></tr>
+  <tr><td><strong>NAT</strong></td><td>✅</td><td>❌</td><td>❌</td><td>Basic web browsing</td></tr>
+  <tr><td><strong>NAT Network</strong></td><td>✅</td><td>✅</td><td>✅</td><td>Multiple VMs sharing NAT</td></tr>
+  <tr><td><strong>Bridged</strong></td><td>✅</td><td>✅</td><td>✅</td><td>VM as an independent device on the local network</td></tr>
+  <tr><td><strong>Host-only</strong></td><td>❌</td><td>✅</td><td>✅</td><td>Isolated network with Host access</td></tr>
+  <tr><td><strong>Internal</strong></td><td>❌</td><td>❌</td><td>✅</td><td>Complete isolation (VMs only)</td></tr>
+</table>
+</div>
+
+<h2>7.3 Example: How does NAT work?</h2>
+
+<div class="diagram">
+  <div class="box accent">Internet</div>
+  <div class="arrow">↓</div>
+  <div class="box">Router</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">Host (192.168.1.10)</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">NAT Engine</div>
+  <div class="arrow">↓</div>
+  <div class="box">VM (10.0.2.15)</div>
+</div>
+
+<p>Websites on the Internet see the <strong>Public IP</strong> of the internet connection, not the VM's private IP.</p>
+
+<div class="quiz">
+  <h3>🧠 Test Your Understanding</h3>
+  <details>
+    <summary>Q1: What is the difference between NAT and Bridged?</summary>
+    <p>NAT puts the VM behind the Host — it cannot be accessed from outside. Bridged makes the VM an independent device with its own IP on the local network.</p>
+  </details>
+  <details>
+    <summary>Q2: When should you use Internal Network?</summary>
+    <p>When you want a completely isolated network connecting VM1 and VM2 only.</p>
+  </details>
+</div>
+
+<hr class="chapter-divider">
+<h1 id="ch8">Chapter 8: IP, MAC, and Device Information</h1>
+
+<h2>8.1 What changes when creating a new VM?</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Information</th><th>Changes?</th><th>Notes</th></tr>
+  <tr><td>Private IP</td><td>✅</td><td>Every VM gets a different IP</td></tr>
+  <tr><td>MAC Address</td><td>✅</td><td>Can be customized manually</td></tr>
+  <tr><td>Computer Name</td><td>✅</td><td>Can be changed inside the OS</td></tr>
+  <tr><td>Operating System</td><td>✅</td><td>Depends on the ISO used</td></tr>
+  <tr><td>Public IP</td><td>❌</td><td>Remains the same as the Host</td></tr>
+  <tr><td>Browser User-Agent</td><td>✅</td><td>Follows the OS type</td></tr>
+  <tr><td>Screen Resolution</td><td>✅</td><td>Based on settings</td></tr>
+</table>
+</div>
+
+<h2>8.2 Changing Internal IP ≠ Changing Public IP</h2>
+
+<p>Changing the internal IP of the VM <strong>does not change</strong> the Public IP that websites see. To change your internet exit address, you need:</p>
+
+<ul>
+  <li><strong>VPN</strong> (Virtual Private Network)</li>
+  <li><strong>Proxy</strong></li>
+  <li>A different Wi-Fi network</li>
+  <li>A different Router</li>
+</ul>
+
+<div class="note">
+  <strong>Note:</strong> This chapter is for understanding only — not an invitation to anonymize yourself or bypass the law.
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch9">Chapter 9: Security Isolation</h1>
+
+<h2>9.1 What happens if Malware enters a VM?</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Scenario</th><th>Result</th></tr>
+  <tr><td>Virus copies files inside the VM</td><td>Stays confined inside the VM</td></tr>
+  <tr><td>Virus deletes system files</td><td>Only affects Windows inside the VM</td></tr>
+  <tr><td>Virus tries to connect to the Internet</td><td>Passes through NAT</td></tr>
+  <tr><td>Exploiting Shared Folders</td><td><strong>Might reach</strong> Host files</td></tr>
+</table>
+</div>
+
+<h2>9.2 VM Escape</h2>
+
+<p><strong>VM Escape</strong> is a vulnerability that allows a program inside the VM to break out and gain control of the Host. These vulnerabilities are <strong>rare</strong> but they exist (e.g., CVE-2025-22226 in VMware/Virtualization platforms).</p>
+
+<div class="warning">
+  <strong>⚠️ Attention:</strong> This doesn't mean VMs are insecure. They provide very strong isolation, but they are not a 100% magical impenetrable wall.
+</div>
+
+<h2>9.3 Features that reduce isolation</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Feature</th><th>Benefit</th><th>Reduces Isolation?</th><th>When to use?</th></tr>
+  <tr><td>Shared Folders</td><td>File sharing</td><td>✅ Yes</td><td>Only when necessary</td></tr>
+  <tr><td>Clipboard Sharing</td><td>Copy & Paste</td><td>✅ Yes</td><td>For regular use</td></tr>
+  <tr><td>USB Passthrough</td><td>Connecting USBs</td><td>✅ Yes</td><td>When needed</td></tr>
+  <tr><td>Port Forwarding</td><td>Opening ports</td><td>✅ Yes</td><td>To run a server</td></tr>
+  <tr><td>Guest Additions</td><td>Performance boost</td><td>⚠️ Slightly</td><td>Almost always</td></tr>
+</table>
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch10">Chapter 10: Windows Sandbox</h1>
+
+<p><strong>Windows Sandbox</strong> is a temporary environment built into Windows 10/11 Pro and Enterprise. It resembles a VM but gets completely destroyed when closed.</p>
+
+<h2>Difference Between VirtualBox VM and Windows Sandbox</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Feature</th><th>VirtualBox VM</th><th>Windows Sandbox</th></tr>
+  <tr><td>Installation</td><td>Separate</td><td>Built-in</td></tr>
+  <tr><td>OS</td><td>Any OS</td><td>Windows only</td></tr>
+  <tr><td>Changes</td><td>Permanent</td><td>Temporary (Lost on close)</td></tr>
+  <tr><td>Resources</td><td>Customizable</td><td>Automatic</td></tr>
+  <tr><td>Use Case</td><td>Long-term projects</td><td>Quick testing</td></tr>
+</table>
+</div>
+
+<div class="tip">
+  <strong>💡 When to use Sandbox?</strong> When you want to quickly test a program you don't trust.
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch11">Chapter 11: Multiple VMs and Nested Virtualization</h1>
+
+<h2>11.1 VM1 + VM2 + VM3</h2>
+<p>You can run more than one VM at the same time — provided your hardware can handle it. Each VM is isolated.</p>
+
+<div class="diagram horizontal">
+  <div class="box accent">Host</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">VM1</div>
+  <div class="box soft">VM2</div>
+  <div class="box soft">VM3</div>
+</div>
+
+<h2>11.2 Nested Virtualization</h2>
+<p><strong>Nested Virtualization</strong> means running a VM inside a VM.</p>
+
+<div class="diagram">
+  <div class="box accent">Host</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">VirtualBox</div>
+  <div class="arrow">↓</div>
+  <div class="box">VM1</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">VirtualBox inside VM1</div>
+  <div class="arrow">↓</div>
+  <div class="box">VM2</div>
+</div>
+
+<ul>
+  <li><strong>Is it possible?</strong> Yes — VirtualBox supports this.</li>
+  <li><strong>Why is it slower?</strong> Every layer adds overhead.</li>
+  <li><strong>Requirements:</strong> CPU must support Virtualization extensions.</li>
+  <li><strong>For beginners?</strong> Not recommended — it's complex and slow.</li>
+</ul>
+
+<hr class="chapter-divider">
+<h1 id="ch12">Chapter 12: VMs for Programming</h1>
+
+<h2>Why a Linux VM as a Backend Programmer?</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Benefit</th><th>Explanation</th></tr>
+  <tr><td>Real Production Environment</td><td>Most servers run Linux</td></tr>
+  <tr><td>Understanding Commands</td><td>apt, systemctl, chmod</td></tr>
+  <tr><td>Project Isolation</td><td>Clean environment for Nexmart</td></tr>
+  <tr><td>Deployment Testing</td><td>Simulating a real server</td></tr>
+  <tr><td>Snapshots</td><td>Taking a snapshot before major changes</td></tr>
+</table>
+</div>
+
+<h2>When is a VM unnecessary?</h2>
+<ul>
+  <li>During the initial stages of learning Node.js.</li>
+  <li>If you are using Docker.</li>
+  <li>If your device has less than 8GB of RAM.</li>
+</ul>
+
+<hr class="chapter-divider">
+
+<h1 id="ch13">Chapter 13: VMs and Nexmart</h1>
+
+<h2>Practical Scenario</h2>
+
+<div class="diagram">
+  <div class="box accent">HOST WINDOWS</div>
+  <div class="arrow">↓</div>
+  <div class="box">Nexmart Development</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">VM (Ubuntu)</div>
+  <div class="arrow">↓</div>
+  <div class="box">Node.js + Express + MongoDB</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">API</div>
+  <div class="arrow">↓</div>
+  <div class="box">Postman (on Host)</div>
+</div>
+
+<h2>Why use an Ubuntu VM for the Nexmart project?</h2>
+
+<ol>
+  <li><strong>Understanding Linux:</strong> Dealing with a real server environment.</li>
+  <li><strong>Testing MongoDB:</strong> It behaves differently than on Windows.</li>
+  <li><strong>Isolated Experiments:</strong> Test without fear of breaking your host.</li>
+  <li><strong>Snapshot Before Upgrades:</strong> Like before updating Node.js versions.</li>
+  <li><strong>Simulating Production:</strong> Creating an environment identical to a live server.</li>
+</ol>
+
+<h2>Do you need a VM right now?</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Stage</th><th>Recommendation</th></tr>
+  <tr><td>Learning basic Node.js</td><td><strong>No</strong> — focus on coding</td></tr>
+  <tr><td>Local Nexmart project</td><td>Maybe — to experience Linux</td></tr>
+  <tr><td>Preparing for server deployment</td><td><strong>Yes</strong></td></tr>
+  <tr><td>Want to learn DevOps</td><td><strong>Yes</strong></td></tr>
+</table>
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch14">Chapter 14: Cybersecurity Labs</h1>
+
+<div class="danger">
+  <strong>🚨 Golden Rule:</strong> All security testing MUST be conducted on <strong>systems you own</strong> or have <strong>explicit written permission</strong> to test.
+</div>
+
+<h2>Components of a Typical Lab</h2>
+
+<div class="diagram">
+  <div class="box accent">VM1 = Attacker (Kali Linux)</div>
+  <div class="arrow">↕</div>
+  <div class="box soft">Isolated Internal Network</div>
+  <div class="arrow">↕</div>
+  <div class="box accent">VM2 = Target (Metasploitable)</div>
+</div>
+
+<h2>Why is this better than testing on physical devices?</h2>
+<ol>
+  <li><strong>Safe:</strong> If something breaks, delete the VM and recreate it.</li>
+  <li><strong>Legal:</strong> Everything is contained within your own environment.</li>
+  <li><strong>Repeatable:</strong> Easy to reset using Snapshots.</li>
+  <li><strong>Educational:</strong> You can observe every step clearly.</li>
+</ol>
+
+<h2>Legitimate Use Cases</h2>
+<div class="table-wrap">
+<table>
+  <tr><th>Field</th><th>Description</th></tr>
+  <tr><td>Malware Analysis</td><td>Analyzing malicious software in an isolated environment</td></tr>
+  <tr><td>Digital Forensics</td><td>Analyzing digital evidence</td></tr>
+  <tr><td>Penetration Testing</td><td>Authorized ethical hacking</td></tr>
+  <tr><td>CTF</td><td>Capture The Flag security competitions</td></tr>
+  <tr><td>Network Security</td><td>Studying network protocols</td></tr>
+</table>
+</div>
+
+<hr class="chapter-divider">
+<h1 id="ch15">Chapter 15: Tor and Dark Web — Awareness</h1>
+
+<h2>15.1 What is Tor?</h2>
+<p><strong>Tor (The Onion Router)</strong> is an onion-routing network that allows relatively anonymous internet browsing.</p>
+
+<h2>15.2 How does Onion Routing work?</h2>
+<ol>
+  <li>The user selects a path through 3 Nodes.</li>
+  <li>Data is encrypted in 3 layers (like an onion).</li>
+  <li>Each node peels off one layer only.</li>
+  <li>Only the final node (Exit Node) sees the final destination.</li>
+</ol>
+
+<h2>15.3 Difference between Surface Web, Deep Web, and Dark Web</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Layer</th><th>Description</th><th>Example</th></tr>
+  <tr><td><strong>Surface Web</strong></td><td>Indexed by search engines</td><td>Google, YouTube</td></tr>
+  <tr><td><strong>Deep Web</strong></td><td>Password-protected content</td><td>Your email, bank account</td></tr>
+  <tr><td><strong>Dark Web</strong></td><td>Hidden networks</td><td>.onion websites</td></tr>
+</table>
+</div>
+
+<div class="note">
+  <strong>Important:</strong> The Dark Web isn't entirely criminal. It is also used by journalists, activists, and people seeking privacy.
+</div>
+
+<h2>15.4 VM + Tor — Architectural Perspective</h2>
+
+<div class="diagram">
+  <div class="box accent">Host Computer</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">Virtual Machine</div>
+  <div class="arrow">↓</div>
+  <div class="box">Tor Browser</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">Tor Network</div>
+  <div class="arrow">↓</div>
+  <div class="box">Internet</div>
+</div>
+
+<div class="danger">
+  <strong>🚨 Warning:</strong> This book does not provide instructions for committing crimes or hiding criminal identities. The goal is understanding and awareness. No system makes a person 100% anonymous.
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch16">Chapter 16: The Risks of Cybercrime Involvement</h1>
+
+<div class="table-wrap">
+<table>
+  <tr><th>Risk</th><th>Explanation</th></tr>
+  <tr><td>Malware</td><td>Malicious software that ruins your device</td></tr>
+  <tr><td>Ransomware</td><td>Encrypting your files and demanding ransom</td></tr>
+  <tr><td>Credential Theft</td><td>Stealing your passwords</td></tr>
+  <tr><td>Scams</td><td>Financial fraud</td></tr>
+  <tr><td>Identity Theft</td><td>Stealing your personal identity</td></tr>
+  <tr><td>Blackmail</td><td>Extortion</td></tr>
+  <tr><td>Financial Loss</td><td>Losing money</td></tr>
+  <tr><td>Legal Consequences</td><td>Prison, fines</td></tr>
+  <tr><td>Digital Evidence</td><td>Law enforcement can track you down</td></tr>
+  <tr><td>Social Engineering</td><td>Psychological manipulation</td></tr>
+  <tr><td>Psychological</td><td>Anxiety, depression, loss of trust</td></tr>
+  <tr><td>Loss of Future</td><td>A criminal record preventing employment</td></tr>
+</table>
+</div>
+
+<div class="note">
+  <strong>Conclusion:</strong> Technology is not a crime. The crime is using it for illegal activities.
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch17">Chapter 17: Practical Lab Project</h1>
+
+<h2>"Build Your First Virtual Lab"</h2>
+
+<p><strong>Goal:</strong> Create a safe lab to learn Linux, networking, and programming.</p>
+
+<p><strong>Components:</strong></p>
+<ul>
+  <li><strong>Host:</strong> Windows</li>
+  <li><strong>VM1:</strong> Ubuntu</li>
+  <li><strong>VM2:</strong> Ubuntu (Optional)</li>
+</ul>
+
+<p><strong>Steps:</strong></p>
+<ol>
+  <li>Create VM1 → Install Ubuntu</li>
+  <li>Create VM2 → Install Ubuntu</li>
+  <li>Configure NAT for VM1 (for Internet access)</li>
+  <li>Create a Host-only Network between VM1 and VM2</li>
+  <li>Install Software: Node.js, Git, VS Code (via SSH)</li>
+  <li>Take a Snapshot named <code>Base Setup</code></li>
+  <li>Test connection: ping between VM1 and VM2</li>
+  <li>Break the network: Try disconnecting the adapter</li>
+  <li>Restore Snapshot: Return to the clean state</li>
+  <li>Safely delete the VM</li>
+</ol>
+
+<div class="tip">
+  <strong>✅ This project is fully educational and legal.</strong>
+</div>
+
+<hr class="chapter-divider">
+  <h1 id="ch18">Chapter 18: Common Beginner Mistakes</h1>
+
+  <h2>Mistakes to Avoid</h2>
+
+  <div class="danger">
+    <ul>
+      <li>❌ Giving a VM full access to Host files unnecessarily</li>
+      <li>❌ Using Shared Folders with sensitive files</li>
+      <li>❌ Using Bridged Networking without understanding it</li>
+      <li>❌ Passing untrusted USB devices to the VM</li>
+      <li>❌ Believing a VM offers 100% protection</li>
+      <li>❌ Believing a VPN offers 100% anonymity</li>
+      <li>❌ Believing Tor offers 100% anonymity</li>
+      <li>❌ Running suspicious files with antivirus disabled</li>
+      <li>❌ Not updating VirtualBox</li>
+      <li>❌ Not updating the Guest OS</li>
+      <li>❌ Saving sensitive passwords in a testing environment</li>
+      <li>❌ Confusing Snapshots with Backups</li>
+    </ul>
+  </div>
+
+  <hr class="chapter-divider">
+
+  <h1 id="ch19">Chapter 19: Frequently Asked Questions (FAQ)</h1>
+
+  <div class="faq-item"><div class="q">Can a virus escape from a VM?</div><div class="a">Very rarely — only through a VM Escape vulnerability.</div></div>
+  <div class="faq-item"><div class="q">Does a VM change my IP?</div><div class="a">It changes your Private IP — not your Public IP.</div></div>
+  <div class="faq-item"><div class="q">Does a VM change my device identity?</div><div class="a">It changes some hardware info — but not everything.</div></div>
+  <div class="faq-item"><div class="q">Does a VM make me anonymous?</div><div class="a">No — isolation ≠ anonymity.</div></div>
+  <div class="faq-item"><div class="q">Can I run multiple VMs?</div><div class="a">Yes — provided you have enough resources.</div></div>
+  <div class="faq-item"><div class="q">Can I run a VM inside a VM?</div><div class="a">Yes — Nested Virtualization. But it is slower.</div></div>
+  <div class="faq-item"><div class="q">Do games work?</div><div class="a">Some do — but performance might be poor.</div></div>
+  <div class="faq-item"><div class="q">Can I use a VM for programming?</div><div class="a">Yes — excellent for Linux and backend development.</div></div>
+  <div class="faq-item"><div class="q">Do I need a VM for Nexmart?</div><div class="a">Not necessarily right now — but useful for the future.</div></div>
+  <div class="faq-item"><div class="q">Is VirtualBox free?</div><div class="a">Yes — free and open-source.</div></div>
+  <div class="faq-item"><div class="q">What's the difference between a VM and Sandbox?</div><div class="a">A VM is permanent — Sandbox is temporary.</div></div>
+  <div class="faq-item"><div class="q">What's the difference between a VM and a VPN?</div><div class="a">VM = a complete computer. VPN = an encrypted network tunnel.</div></div>
+  <div class="faq-item"><div class="q">Is the Dark Web all about crime?</div><div class="a">No — but it does contain illegal activity.</div></div>
+  <div class="faq-item"><div class="q">Is using Tor legal?</div><div class="a">Yes — but using it to commit crimes is illegal.</div></div>
+  <div class="faq-item"><div class="q">Is a Snapshot a Backup?</div><div class="a">No — Snapshots are just for quick rollbacks.</div></div>
+  <div class="faq-item"><div class="q">Can I move a VM to another computer?</div><div class="a">Yes — via Export/Import.</div></div>
+
+  <hr class="chapter-divider">
+
+  <h1 id="glossary">Glossary of Terms</h1>
+
+  <div class="table-wrap">
+  <table>
+    <tr><th>Term</th><th>Explanation</th><th>Example</th></tr>
+    <tr><td>Virtual Machine</td><td>Simulated computer</td><td>Ubuntu VM</td></tr>
+    <tr><td>Host</td><td>The physical computer</td><td>Windows Laptop</td></tr>
+    <tr><td>Guest</td><td>The OS inside the VM</td><td>Windows 11 in VM</td></tr>
+    <tr><td>Hypervisor</td><td>VM Manager</td><td>VirtualBox</td></tr>
+    <tr><td>Virtualization</td><td>Running multiple systems</td><td>Linux and Windows</td></tr>
+    <tr><td>Snapshot</td><td>State image</td><td>Clean Windows point</td></tr>
+    <tr><td>Clone</td><td>Full copy</td><td>Independent backup copy</td></tr>
+    <tr><td>ISO</td><td>Disk Image File</td><td>Windows11.iso</td></tr>
+    <tr><td>NAT</td><td>Network Address Translation</td><td>VM → Host → Internet</td></tr>
+    <tr><td>Bridged</td><td>VM as an independent device</td><td>Gets IP from Router</td></tr>
+    <tr><td>Host-only</td><td>Isolated network</td><td>VM ↔ Host</td></tr>
+    <tr><td>Internal Network</td><td>VM to VM network</td><td>VM1 ↔ VM2</td></tr>
+    <tr><td>Public IP</td><td>Internet Provider IP</td><td>203.0.113.5</td></tr>
+    <tr><td>Private IP</td><td>Internal local IP</td><td>192.168.1.10</td></tr>
+    <tr><td>MAC Address</td><td>Network Card Address</td><td>00:1A:2B:3C:4D:5E</td></tr>
+    <tr><td>DNS</td><td>Domain Name System</td><td>google.com</td></tr>
+    <tr><td>Gateway</td><td>Network exit point</td><td>192.168.1.1</td></tr>
+    <tr><td>VPN</td><td>Virtual Private Network</td><td>NordVPN</td></tr>
+    <tr><td>Proxy</td><td>Internet intermediary</td><td>HTTP Proxy</td></tr>
+    <tr><td>Tor</td><td>The Onion Router</td><td>Tor Browser</td></tr>
+    <tr><td>Dark Web</td><td>Hidden networks</td><td>.onion domains</td></tr>
+    <tr><td>Deep Web</td><td>Password-protected content</td><td>Your email inbox</td></tr>
+    <tr><td>Sandbox</td><td>Temporary environment</td><td>Windows Sandbox</td></tr>
+    <tr><td>Isolation</td><td>Separating environments</td><td>Isolated VMs</td></tr>
+    <tr><td>VM Escape</td><td>Breakout vulnerability</td><td>CVE-2025-22226</td></tr>
+    <tr><td>Nested Virtualization</td><td>VM inside VM</td><td>VM → VM</td></tr>
+    <tr><td>Firewall</td><td>Blocks/allows connections</td><td>Windows Firewall</td></tr>
+    <tr><td>Port Forwarding</td><td>Routing traffic to a port</td><td>Exposing a VM server</td></tr>
+  </table>
+  </div>
+
+  <hr class="chapter-divider">
+
+  <h1 id="summary">Summary</h1>
+
+  <p>Virtual Machines are an incredibly powerful tool for:</p>
+
+  <ul>
+    <li><strong>Programmers:</strong> Isolated development environments, Linux testing, server simulation.</li>
+    <li><strong>Cybersecurity Students:</strong> Safe labs, malware analysis, network studies.</li>
+    <li><strong>Everyday Users:</strong> Trying new software, protecting devices, continuous learning.</li>
+  </ul>
+
+  <div class="tip">
+    <strong>✅ The Key:</strong> Responsible and legal use. Understanding technology makes you more aware and secure, opening new doors in Programming, Cybersecurity, and DevOps.
+  </div>
+
+  <hr class="chapter-divider">
+
+  <h1 id="references">References</h1>
+
+  <ol>
+    <li>Oracle VirtualBox Documentation — <a href="https://docs.oracle.com/en/virtualization/virtualbox/" target="_blank" rel="noopener">docs.oracle.com</a></li>
+    <li>VirtualBox Official — <a href="https://www.virtualbox.org/" target="_blank" rel="noopener">virtualbox.org</a></li>
+    <li>Microsoft Windows Sandbox — <a href="https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/windows-sandbox/" target="_blank" rel="noopener">learn.microsoft.com</a></li>
+    <li>Tor Project — <a href="https://www.torproject.org/" target="_blank" rel="noopener">torproject.org</a></li>
+    <li>NIST Virtualization Security Guidelines</li>
+    <li>MITRE CVE Database — <a href="https://cve.mitre.org/" target="_blank" rel="noopener">cve.mitre.org</a></li>
+  </ol>
+
+  <div class="note" style="text-align:center; margin-top:40px;">
+    <strong>End of Book 📘</strong><br>
+    Thank you for reading. Start your practical application today!
+  </div>
+
+  <hr class="chapter-divider">
+
+  <div class="pdf-downloads">
+    <div class="pdf-links">
+      <a href="./books/virtual-machines-arabic.pdf" class="pdf-link" target="_blank">
+        <span class="pdf-icon">📘</span> Arabic PDF
+      </a>
+      <a href="./books/virtual-machines-english.pdf" class="pdf-link" target="_blank">
+        <span class="pdf-icon">📘</span> English PDF
+      </a>
+    </div>
+  </div>
+
+  <div class="author-card">
+    <h2 class="author-name">Mousa Ahmed Hijazi</h2>
+    <p class="author-bio">A student and learner in the field of programming, interested in web development. I started my journey learning Front-End interfaces, then transitioned to Back-End development. I rely heavily on practical application and building projects to understand real systems rather than just focusing on theories.</p>
+    
+    <div class="author-contact">
+      <div class="contact-item">
+        <strong>📞 Contact:</strong> <span dir="ltr">970595560240</span>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 25px;">Skills & Technologies Learned</h3>
+    <div class="skills-grid">
+      <span class="skill-tag">C++</span>
+      <span class="skill-tag">HTML</span>
+      <span class="skill-tag">CSS</span>
+      <span class="skill-tag">JavaScript</span>
+      <span class="skill-tag">Bootstrap</span>
+      <span class="skill-tag">React</span>
+      <span class="skill-tag">Next.js</span>
+      <span class="skill-tag">Node.js</span>
+      <span class="skill-tag">Express.js</span>
+      <span class="skill-tag">MongoDB</span>
+      <span class="skill-tag">Mongoose</span>
+      <span class="skill-tag">REST APIs</span>
+      <span class="skill-tag">Postman</span>
+      <span class="skill-tag">Git</span>
+      <span class="skill-tag">GitHub</span>
+    </div>
+  </div>
+
+  <div class="project-card">
+    <h2 class="project-title">Nexmart Project</h2>
+    <p class="project-type">Marketplace / E-commerce (In Development)</p>
+    <p class="project-desc">Nexmart is an e-commerce platform dedicated to the local market in Gaza. The project aims to organize the display and purchase of products, with plans to develop a comprehensive system encompassing user management, vendors, orders, and electronic payments. This project serves as a practical application of what I am learning in integrated systems development and databases.</p>
+    <div class="project-status">
+      ⚠️ Links (GitHub / Live Demo) will be added later upon project completion.
+    </div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <h3 class="footer-title">Virtual Machines — From Zero to Professional</h3>
+  <div class="footer-author">Written and Developed by: Mousa Ahmed Hijazi</div>
+  <div class="footer-contact">Contact: <span dir="ltr">970595560240</span></div>
+</footer>
+
+<script src="./js/app.js"></script>
+</body>
+</html>
