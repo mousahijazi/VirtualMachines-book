@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1e5ab4">
+<title>الأجهزة الافتراضية — من الصفر إلى الاحتراف</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1e5ab4;
+    --primary-light: #2e6bc4;
+    --primary-lighter: #4a7bc8;
+    --accent: #d4e6ff;
+    --bg: #f5f9ff;
+    --bg-soft: #fbfdff;
+    --text: #1a2b4a;
+    --text-soft: #4a5a7a;
+    --border: #c0d9f5;
+    --border-soft: #dceafc;
+    --warning: #e88b1e;
+    --success: #1ea85a;
+    --danger: #d63a3a;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.95;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  #progress-bar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 4px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary), var(--primary-lighter));
+    z-index: 9999;
+    transition: width 0.1s ease;
+    box-shadow: 0 0 10px rgba(46, 107, 196, 0.5);
+  }
+
+  #back-to-top {
+    position: fixed;
+    bottom: 24px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 22px;
+    box-shadow: 0 6px 20px rgba(30, 90, 180, 0.35);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 9998;
+    font-family: inherit;
+  }
+  #back-to-top.show { opacity: 1; visibility: visible; }
+  #back-to-top:active { transform: scale(0.92); }
+
+  .page {
+    max-width: 880px;
+    margin: 30px auto;
+    background: white;
+    padding: 55px 65px;
+    box-shadow: 0 4px 30px rgba(30, 90, 180, 0.08);
+    border-radius: 10px;
+  }
+
+  .cover {
+    text-align: center;
+    padding: 90px 40px 70px;
+    background: linear-gradient(150deg, #e3f0ff 0%, #f5f9ff 60%, #ffffff 100%);
+    border-radius: 10px;
+    margin-bottom: 40px;
+    border: 1px solid var(--border-soft);
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: "";
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(46, 107, 196, 0.12), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .cover::after {
+    content: "";
+    position: absolute;
+    bottom: -60px;
+    left: -60px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(46, 107, 196, 0.08), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .cover .icon-vm {
+    font-size: 70px;
+    margin-bottom: 20px;
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+  .cover h1 {
+    color: var(--primary);
+    font-size: 2.8em;
+    margin: 10px 0;
+    border: none;
+    font-weight: 900;
+    letter-spacing: -1px;
+    position: relative;
+    z-index: 1;
+    line-height: 1.3;
+  }
+  .cover .subtitle {
+    color: var(--primary-light);
+    font-size: 1.35em;
+    font-weight: 600;
+    margin: 8px 0;
+    position: relative;
+    z-index: 1;
+    line-height: 1.5;
+  }
+  .cover .tagline {
+    color: var(--text-soft);
+    font-size: 1em;
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 2px dashed var(--border);
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+  }
+
+  h1 {
+    color: var(--primary);
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 12px;
+    margin-top: 50px;
+    font-size: 1.9em;
+    font-weight: 700;
+    scroll-margin-top: 20px;
+    line-height: 1.4;
+  }
+  h2 {
+    color: var(--primary-light);
+    margin-top: 38px;
+    font-size: 1.4em;
+    font-weight: 700;
+    scroll-margin-top: 20px;
+    line-height: 1.45;
+  }
+  h3 {
+    color: var(--primary-lighter);
+    margin-top: 28px;
+    font-size: 1.15em;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  p { margin: 14px 0; }
+
+  a { color: var(--primary); text-decoration: none; border-bottom: 1px dotted var(--primary); word-break: break-word; }
+  a:active { color: var(--primary-light); }
+
+  strong { color: var(--primary); font-weight: 700; }
+
+  ul, ol { padding-right: 24px; }
+  li { margin: 6px 0; }
+
+  .toc {
+    background: var(--bg-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    padding: 25px 35px;
+    margin: 30px 0;
+  }
+  .toc h2 { margin-top: 0; color: var(--primary); }
+  .toc ol { padding-right: 25px; margin: 0; }
+  .toc li { margin: 8px 0; }
+  .toc a { border-bottom: none; }
+  .toc a:active { color: var(--primary-light); }
+
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 22px 0;
+    border-radius: 6px;
+    max-width: 100%;
+  }
+  .table-wrap table { margin: 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 22px 0;
+    background: var(--bg-soft);
+    border-radius: 6px;
+    overflow: hidden;
+    font-size: 0.95em;
+  }
+  th {
+    background: var(--accent);
+    color: var(--primary);
+    padding: 13px 15px;
+    text-align: right;
+    border: 1px solid var(--border);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  td {
+    padding: 11px 15px;
+    border: 1px solid var(--border-soft);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #f4f9ff; }
+
+  .note, .warning, .tip, .danger, .info {
+    padding: 18px 22px;
+    margin: 22px 0;
+    border-radius: 6px;
+    position: relative;
+    font-size: 0.97em;
+    word-wrap: break-word;
+  }
+  .note { background: #e8f3ff; border-right: 5px solid var(--primary-light); }
+  .warning { background: #fff4e6; border-right: 5px solid var(--warning); }
+  .tip { background: #e8fff0; border-right: 5px solid var(--success); }
+  .danger { background: #ffe9e9; border-right: 5px solid var(--danger); }
+  .info { background: #eef4fb; border-right: 5px solid var(--primary-lighter); }
+
+  code {
+    background: #eef4fb;
+    color: var(--primary);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.9em;
+    direction: ltr;
+    display: inline-block;
+    word-break: break-all;
+    max-width: 100%;
+  }
+  pre {
+    background: #1a2b4a;
+    color: #e3f0ff;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    direction: ltr;
+    text-align: left;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.88em;
+    line-height: 1.6;
+    max-width: 100%;
+    margin: 20px 0;
+  }
+  pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    display: block;
+    word-break: normal;
+  }
+
+  .diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 30px 0;
+    padding: 25px 20px;
+    background: linear-gradient(180deg, #f8fbff, #eef6ff);
+    border-radius: 10px;
+    border: 1px solid var(--border-soft);
+    max-width: 100%;
+  }
+  .diagram .box {
+    background: white;
+    border: 2px solid var(--primary-light);
+    color: var(--primary);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    min-width: 200px;
+    max-width: 100%;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(30, 90, 180, 0.06);
+    font-size: 0.95em;
+    word-wrap: break-word;
+  }
+  .diagram .box.accent {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  .diagram .box.soft {
+    background: var(--accent);
+    border-color: var(--border);
+  }
+  .diagram .arrow {
+    color: var(--primary-light);
+    font-size: 1.6em;
+    line-height: 1;
+    font-weight: bold;
+  }
+  .diagram.horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .diagram.horizontal .arrow { transform: rotate(-90deg); }
+
+  .chapter-divider {
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 50px 0;
+    border: none;
+  }
+
+  .intro-message {
+    background: linear-gradient(135deg, #e8f3ff, #f5f9ff);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 30px 35px;
+    margin: 30px 0;
+    font-size: 1.05em;
+    position: relative;
+  }
+  .intro-message::before {
+    content: "📖";
+    position: absolute;
+    top: -18px;
+    right: 25px;
+    background: white;
+    padding: 0 12px;
+    font-size: 1.8em;
+    border-radius: 50%;
+  }
+
+  .faq-item {
+    border-right: 4px solid var(--accent);
+    padding: 12px 20px;
+    margin: 15px 0;
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .faq-item .q {
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .faq-item .a { color: var(--text-soft); }
+
+  .quiz {
+    background: #fffbe8;
+    border: 2px dashed #e8b800;
+    border-radius: 10px;
+    padding: 25px;
+    margin: 30px 0;
+  }
+  .quiz h3 { color: #b38600; margin-top: 0; }
+  .quiz details {
+    margin: 12px 0;
+    padding: 12px 18px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #f0e0a0;
+  }
+  .quiz summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #b38600;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .quiz details[open] summary { margin-bottom: 10px; }
+
+  @page {
+    size: A4;
+    margin: 18mm 15mm;
+  }
+  @media print {
+    body { background: white; font-size: 11pt; line-height: 1.7; }
+    .page { box-shadow: none; margin: 0; padding: 0; max-width: 100%; border-radius: 0; }
+    #progress-bar, #back-to-top { display: none !important; }
+    h1 { page-break-before: always; font-size: 20pt; }
+    h1:first-of-type { page-break-before: avoid; }
+    h2, h3 { page-break-after: avoid; }
+    table, .diagram, .note, .warning, .tip, .danger, .info { page-break-inside: avoid; }
+    .cover { page-break-after: always; background: white; border: none; }
+    a { color: var(--primary); border-bottom: none; }
+    tr:hover td { background: inherit; }
+    .table-wrap { overflow: visible; }
+  }
+
+  @media (max-width: 640px) {
+    body { font-size: 15px; line-height: 1.85; }
+    .page { padding: 30px 18px; margin: 12px 8px; border-radius: 8px; }
+    h1 { font-size: 1.5em; padding-bottom: 9px; margin-top: 40px; }
+    h2 { font-size: 1.2em; margin-top: 30px; }
+    h3 { font-size: 1.05em; }
+    .cover { padding: 50px 20px 40px; margin-bottom: 25px; }
+    .cover h1 { font-size: 2em; letter-spacing: 0; }
+    .cover .subtitle { font-size: 1.05em; }
+    .cover .icon-vm { font-size: 54px; margin-bottom: 14px; }
+    .cover .tagline { margin-top: 22px; padding-top: 18px; font-size: 0.9em; }
+    .toc { padding: 18px 20px; }
+    .diagram { padding: 18px 12px; gap: 8px; }
+    .diagram .box { min-width: 0; width: 100%; max-width: 300px; padding: 10px 14px; font-size: 0.9em; }
+    .diagram.horizontal { flex-direction: column; }
+    .diagram.horizontal .arrow { transform: none; }
+    pre { font-size: 0.78em; padding: 14px; border-radius: 6px; }
+    code { font-size: 0.85em; padding: 2px 5px; }
+    table { font-size: 0.88em; }
+    th, td { padding: 9px 10px; }
+    th { white-space: normal; }
+    .note, .warning, .tip, .danger, .info { padding: 14px 16px; font-size: 0.93em; }
+    .intro-message { padding: 22px 20px; font-size: 1em; }
+    .intro-message::before { right: 15px; font-size: 1.4em; top: -14px; }
+    #back-to-top { bottom: 20px; left: 15px; width: 46px; height: 46px; font-size: 20px; }
+    .quiz { padding: 20px 16px; }
+    .quiz details { padding: 11px 14px; }
+    .faq-item { padding: 11px 16px; }
+    .chapter-divider { margin: 35px 0; }
+  }
+
+  @media (max-width: 360px) {
+    body { font-size: 14.5px; }
+    .page { padding: 22px 13px; margin: 8px 5px; border-radius: 6px; }
+    .cover { padding: 38px 14px 28px; border-radius: 8px; }
+    .cover h1 { font-size: 1.65em; }
+    .cover .subtitle { font-size: 0.95em; }
+    .cover .icon-vm { font-size: 44px; }
+    h1 { font-size: 1.35em; padding-bottom: 8px; margin-top: 32px; }
+    h2 { font-size: 1.1em; margin-top: 24px; }
+    h3 { font-size: 1em; }
+    .toc { padding: 15px 14px; }
+    .toc ol { padding-right: 18px; }
+    table { font-size: 0.82em; }
+    th, td { padding: 7px 8px; }
+    .diagram { padding: 14px 10px; }
+    .diagram .box { padding: 8px 10px; font-size: 0.85em; }
+    .diagram .arrow { font-size: 1.3em; }
+    pre { font-size: 0.72em; padding: 12px; }
+    code { font-size: 0.8em; }
+    .note, .warning, .tip, .danger, .info { padding: 12px 13px; font-size: 0.9em; }
+    .intro-message { padding: 18px 15px; }
+    .quiz { padding: 16px 12px; }
+    .quiz details { padding: 10px 12px; }
+    .faq-item { padding: 10px 13px; }
+    ul, ol { padding-right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<button id="back-to-top" title="عودة للأعلى">↑</button>
+
+<div class="page">
+<div class="cover">
+  <span class="icon-vm">💻</span>
+  <h1>الأجهزة الافتراضية</h1>
+  <p class="subtitle">Virtual Machines — من الصفر إلى الاحتراف</p>
+  <p class="subtitle">فهمها، إنشاؤها، استخدامها، الشبكات، العزل الأمني، والتطبيقات العملية</p>
+  <p class="tagline">دليل تعليمي شامل للمبتدئين والمبرمجين</p>
+</div>
+
+<div class="intro-message">
+  <strong>رسالة إلى القارئ:</strong><br>
+  الهدف من هذا الكتاب ليس تعليمك الدخول إلى عالم الجرائم الإلكترونية، بل مساعدتك على فهم تقنية قوية ستجعلك مبرمجًا أفضل، وأكثر وعيًا بأمن المعلومات، وقادرًا على بناء بيئات تطوير واختبار حقيقية. فهم التكنولوجيا هو أول خطوة نحو استخدامها بشكل مسؤول وقانوني.
+</div>
+
+<div class="toc">
+  <h2>📑 الفهرس</h2>
+  <ol>
+    <li><a href="#ch0">مقدمة: لماذا أتعلم Virtual Machines؟</a></li>
+    <li><a href="#ch1">ما هو الكمبيوتر الافتراضي؟</a></li>
+    <li><a href="#ch2">كيف يعمل من الداخل؟</a></li>
+    <li><a href="#ch3">VirtualBox: بوابتك</a></li>
+    <li><a href="#ch4">إنشاء أول جهاز افتراضي</a></li>
+    <li><a href="#ch5">تثبيت البرامج</a></li>
+    <li><a href="#ch6">Snapshots والنسخ الاحتياطي</a></li>
+    <li><a href="#ch7">الشبكات داخل VM</a></li>
+    <li><a href="#ch8">IP وMAC ومعلومات الجهاز</a></li>
+    <li><a href="#ch9">العزل الأمني</a></li>
+    <li><a href="#ch10">Windows Sandbox</a></li>
+    <li><a href="#ch11">أجهزة متعددة وNested Virtualization</a></li>
+    <li><a href="#ch12">VM للبرمجة</a></li>
+    <li><a href="#ch13">VM وNexmart</a></li>
+    <li><a href="#ch14">مختبرات الأمن السيبراني</a></li>
+    <li><a href="#ch15">Tor وDark Web — توعية</a></li>
+    <li><a href="#ch16">مخاطر الجرائم الإلكترونية</a></li>
+    <li><a href="#ch17">مشروع المختبر العملي</a></li>
+    <li><a href="#ch18">الأخطاء الشائعة</a></li>
+    <li><a href="#ch19">الأسئلة الشائعة (FAQ)</a></li>
+    <li><a href="#glossary">قاموس المصطلحات</a></li>
+    <li><a href="#summary">الخلاصة</a></li>
+    <li><a href="#references">المراجع</a></li>
+  </ol>
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch0">مقدمة: لماذا أتعلم Virtual Machines؟</h1>
+
+<p>تخيل أنك تتعلم البرمجة وتبني مشروعًا اسمه <strong>Nexmart</strong> — متجر إلكتروني حقيقي. أنت تكتب Backend باستخدام Node.js وExpress وMongoDB. كل شيء يعمل على جهازك. لكن ماذا لو أردت تجربة إعداد خادم Linux حقيقي بدون المخاطرة بجهازك؟ ماذا لو أردت اختبار برنامج لا تثق به؟ ماذا لو أردت تعلم الشبكات بدون شراء أجهزة إضافية؟</p>
+
+<p>هنا يأتي دور <strong>الجهاز الافتراضي (Virtual Machine)</strong>.</p>
+
+<h2>ماذا سأستفيد أنا شخصيًا؟</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>الفائدة</th><th>الشرح</th></tr>
+  <tr><td>فهم Linux</td><td>ستشغّل Ubuntu أو أي توزيعة داخل بيئة آمنة</td></tr>
+  <tr><td>فهم الشبكات</td><td>IP، Router، DNS، NAT — عمليًا وليس نظريًا</td></tr>
+  <tr><td>فهم الخوادم</td><td>كيف يعمل السيرفر الذي سيستضيف تطبيقك</td></tr>
+  <tr><td>الاستعداد لـDevOps</td><td>Docker، Kubernetes، CI/CD كلها تعتمد على virtualization</td></tr>
+  <tr><td>فهم Cybersecurity</td><td>العزل واختبار الثغرات في بيئة قانونية</td></tr>
+  <tr><td>بيئات تطوير معزولة</td><td>بيئة نظيفة لمشروع Nexmart منفصلة عن ملفاتك</td></tr>
+  <tr><td>اختبار المشاريع</td><td>تجربة إعدادات جديدة دون خوف من تخريب نظامك</td></tr>
+</table>
+</div>
+
+<div class="tip">
+  <strong>✅ الحقيقة:</strong> معظم مطوري Backend المحترفين يعملون يوميًا مع أجهزة افتراضية أو حاويات (Containers) دون أن يشعروا. تعلمها الآن = استعداد لسوق العمل.
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch1">الفصل 1: ما هو الكمبيوتر الافتراضي؟</h1>
+
+<h2>1.1 ما هو الكمبيوتر الحقيقي؟</h2>
+
+<p>الكمبيوتر الحقيقي (Physical Computer) هو الجهاز الذي تلمسه بيدك. يتكون من ثلاث طبقات أساسية:</p>
+
+<div class="table-wrap">
+<table>
+  <tr><th>المكون</th><th>الوصف</th><th>مثال</th></tr>
+  <tr><td><strong>Hardware (العتاد)</strong></td><td>الأجزاء المادية</td><td>المعالج، الذاكرة، القرص، الشاشة</td></tr>
+  <tr><td><strong>Operating System</strong></td><td>البرنامج الذي يدير العتاد</td><td>Windows، Linux، macOS</td></tr>
+  <tr><td><strong>Software (البرمجيات)</strong></td><td>التطبيقات التي تستخدمها</td><td>Chrome، VS Code، الألعاب</td></tr>
+</table>
+</div>
+
+<h2>1.2 ما هو Virtual Machine؟</h2>
+
+<p><strong>Virtual Machine (الجهاز الافتراضي)</strong> هو كمبيوتر كامل — بمعالج وذاكرة وقرص صلب وشبكة ونظام تشغيل — لكنه <strong>ليس قطعة مادية</strong>. إنه برنامج يعمل داخل كمبيوتر حقيقي، ويتصرف تمامًا كما لو كان كمبيوترًا مستقلًا.</p>
+
+<div class="note">
+  <strong>🏠 تشبيه من الحياة اليومية:</strong><br>
+  تخيل أنك تعيش في بيت كبير. داخل هذا البيت، بنيت غرفة مستقلة تمامًا — لها بابها الخاص، ومفتاحها الخاص، وأثاثها الخاص. هذه الغرفة جزء من البيت، لكنها معزولة عنه.<br><br>
+  <strong>التفسير التقني:</strong> الجهاز الافتراضي هو برنامج محاكاة (Emulation) ينشئ بيئة معزولة تحاكي عتاد الكمبيوتر. عندما يعمل نظام التشغيل داخل الجهاز الافتراضي، يظن أنه يعمل على جهاز حقيقي.
+</div>
+
+<h2>1.3 المصطلحات الأساسية</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>المصطلح</th><th>الترجمة</th><th>الشرح البسيط</th></tr>
+  <tr><td><strong>Host</strong></td><td>المضيف</td><td>الكمبيوتر الحقيقي الذي يشغل البرنامج</td></tr>
+  <tr><td><strong>Guest</strong></td><td>الضيف</td><td>نظام التشغيل الذي يعمل داخل الجهاز الافتراضي</td></tr>
+  <tr><td><strong>Virtual Machine</strong></td><td>الجهاز الافتراضي</td><td>الكمبيوتر المُحاكى بالبرمجيات</td></tr>
+  <tr><td><strong>Hypervisor</strong></td><td>مدير الأجهزة الافتراضية</td><td>البرنامج الذي يخلق الأجهزة الافتراضية ويديرها</td></tr>
+</table>
+</div>
+
+<p><strong>Hypervisor</strong> هو مثل "مدير المبنى" الذي يوزع الموارد (الكهرباء، الماء) على الغرف المختلفة. هناك نوعان:</p>
+
+<ul>
+  <li><strong>Type 1 (Bare-metal):</strong> يعمل مباشرة على العتاد — مثل VMware ESXi وMicrosoft Hyper-V.</li>
+  <li><strong>Type 2 (Hosted):</strong> يعمل فوق نظام تشغيل — مثل Oracle VirtualBox وVMware Workstation.</li>
+</ul>
+
+<h2>1.4 مثال عملي</h2>
+
+<p><strong>Laptop حقيقي (Host):</strong></p>
+<ul>
+  <li>Windows 11</li>
+  <li>24GB RAM</li>
+  <li>Intel Core i5 12th Gen</li>
+</ul>
+
+<p><strong>داخله VM (Guest):</strong></p>
+<ul>
+  <li>Windows 11</li>
+  <li>8GB RAM</li>
+  <li>4 CPU cores</li>
+  <li>80GB virtual disk</li>
+</ul>
+
+<p>عند تشغيل الـVM، يتم <strong>اقتطاع</strong> 8GB من الـ24GB للجهاز الافتراضي. الـ16GB المتبقية للـHost. هذا الاقتطاع <strong>مؤقت</strong> — عند إغلاق الـVM، تعود الذاكرة بالكامل للـHost.</p>
+
+<div class="diagram">
+  <div class="box accent">HOST COMPUTER (Windows 11)</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">VirtualBox (Hypervisor)</div>
+  <div class="arrow">↓</div>
+  <div class="box">Virtual Machine</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">Windows 11 Guest</div>
+  <div class="arrow">↓</div>
+  <div class="box">Applications داخل الـVM</div>
+</div>
+
+<h2>1.5 هل الـVM جهاز حقيقي؟</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>السؤال</th><th>الإجابة</th></tr>
+  <tr><td>هل لها RAM؟</td><td>نعم — لكن <strong>virtual RAM</strong> مقتطعة من ذاكرة الـHost</td></tr>
+  <tr><td>هل لها CPU؟</td><td>نعم — أنوية افتراضية من معالج الـHost</td></tr>
+  <tr><td>هل لها Hard Disk؟</td><td>نعم — لكنه <strong>virtual disk</strong> (ملف على قرص الـHost)</td></tr>
+  <tr><td>هل لها Network Card؟</td><td>نعم — <strong>virtual adapter</strong> مُحاكاة برمجيًا</td></tr>
+  <tr><td>هل لها Operating System؟</td><td>نعم — نظام تشغيل كامل</td></tr>
+</table>
+</div>
+
+<div class="quiz">
+  <h3>🧠 اختبر فهمك</h3>
+  <details>
+    <summary>س1: إذا كان لدي Windows حقيقي وWindows افتراضي، أيهما يسمى Host؟</summary>
+    <p>الـWindows الحقيقي هو الـHost لأنه الجهاز الفعلي الذي يشغل البرنامج.</p>
+  </details>
+  <details>
+    <summary>س2: هل RAM الـVM حقيقية أم وهمية؟</summary>
+    <p>ذاكرة حقيقية مقتطعة من الـHost، لكنها "افتراضية" من منظور الـVM.</p>
+  </details>
+  <details>
+    <summary>س3: ما الفرق بين Host وGuest؟</summary>
+    <p>Host = الكمبيوتر الفعلي. Guest = نظام التشغيل الذي يعمل داخل VM.</p>
+  </details>
+</div>
+
+<hr class="chapter-divider">
+<h1 id="ch2">الفصل 2: كيف يعمل الكمبيوتر الافتراضي من الداخل؟</h1>
+
+<h2>2.1 Virtualization (الافتراضية)</h2>
+<p><strong>Virtualization</strong> هي التقنية التي تسمح بتشغيل أكثر من نظام تشغيل على نفس العتاد. الـHypervisor يوزع الموارد بين الأنظمة الافتراضية.</p>
+
+<h2>2.2 CPU Virtualization</h2>
+<p>المعالج الحقيقي يحتوي على أنوية (Cores). عندما تعطي الـVM "4 CPU cores"، أنت تسمح لها باستخدام 4 أنوية من معالج الـHost. الـHypervisor يجدول استخدام هذه الأنوية.</p>
+
+<div class="note">
+  <strong>ملاحظة:</strong> لو كان المعالج 8 أنوية، وأعطيت الـVM 4، لا يعني أن الـHost سيصبح بمعالج 4 أنوية. بل يعني أن الـVM <em>مصرّح لها</em> باستخدام حتى 4 أنوية عند الحاجة.
+</div>
+
+<h2>2.3 Intel VT-x / AMD-V</h2>
+<p>لتحقيق أداء جيد، تحتاج المعالجات الحديثة إلى <strong>Hardware Virtualization</strong> — ميزة مدمجة في المعالج تسرّع عمل الأجهزة الافتراضية:</p>
+<ul>
+  <li><strong>Intel VT-x:</strong> تقنية إنتل</li>
+  <li><strong>AMD-V:</strong> تقنية AMD</li>
+</ul>
+<p>إذا لم تُفعّل هذه الميزة في <strong>BIOS/UEFI</strong>، ستعمل الأجهزة الافتراضية ببطء شديد أو لن تعمل أصلًا.</p>
+
+<h2>2.4 Virtual Disk</h2>
+<p>الـ<strong>Virtual Disk</strong> هو ملف كبير على قرص الـHost يحتوي على كل بيانات الـVM. هناك أنواع:</p>
+<ul>
+  <li><strong>VDI:</strong> النوع الافتراضي في VirtualBox</li>
+  <li><strong>VHD/VHDX:</strong> من Microsoft (Hyper-V)</li>
+  <li><strong>VMDK:</strong> من VMware</li>
+</ul>
+<p>نمطان:</p>
+<ul>
+  <li><strong>Dynamically Allocated:</strong> يكبر تدريجيًا (الأفضل للمبتدئ)</li>
+  <li><strong>Fixed Size:</strong> يُحجز كاملًا منذ البداية (أسرع، لكن مساحة فورية)</li>
+</ul>
+
+<h2>2.5 جدول تخصيص الموارد</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>المورد</th><th>الجهاز الحقيقي</th><th>ما نعطيه للـVM</th><th>التأثير</th></tr>
+  <tr><td>RAM</td><td>24GB</td><td>8GB</td><td>يتبقى 16GB للـHost</td></tr>
+  <tr><td>CPU</td><td>8 cores</td><td>4 cores</td><td>مشاركة ديناميكية</td></tr>
+  <tr><td>Disk</td><td>512GB SSD</td><td>80GB</td><td>ملف VDI على القرص</td></tr>
+  <tr><td>GPU</td><td>Intel Iris Xe</td><td>VMSVGA برمجي</td><td>الألعاب قد لا تعمل جيدًا</td></tr>
+</table>
+</div>
+
+<h2>2.6 هل تشغيل VM يجعل الجهاز أبطأ؟</h2>
+<p><strong>نعم، مؤقتًا.</strong> عندما يكون الـVM قيد التشغيل: جزء من الـRAM محجوز، جزء من الأنوية مشغولة، والـGPU قد يكون أبطأ.</p>
+<p><strong>متى يصبح الجهاز بطيئًا؟</strong></p>
+<ul>
+  <li>إذا أعطيت الـVM أكثر من 60% من ذاكرة الـHost.</li>
+  <li>إذا شغلت VM ثقيلة على جهاز بذاكرة قليلة.</li>
+  <li>إذا كان القرص HDD وليس SSD.</li>
+</ul>
+
+<div class="warning">
+  <strong>⚠️ تحذير:</strong> لا تشغّل VM ثقيلة على جهاز بذاكرة أقل من 8GB — التجربة ستصبح مؤلمة.
+</div>
+
+<div class="quiz">
+  <h3>🧠 اختبر فهمك</h3>
+  <details>
+    <summary>س1: لماذا نحتاج تفعيل Intel VT-x؟</summary>
+    <p>لأنه يسرّع عمل الـVM بشكل كبير عبر دعم العتاد المباشر.</p>
+  </details>
+  <details>
+    <summary>س2: ما الفرق بين Dynamic وFixed Disk؟</summary>
+    <p>Dynamic يكبر تدريجيًا، Fixed يُحجز كاملًا من البداية.</p>
+  </details>
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch3">الفصل 3: VirtualBox — بوابتك إلى العالم الافتراضي</h1>
+
+<h2>3.1 ما هو VirtualBox؟</h2>
+<p><strong>Oracle VirtualBox</strong> هو برنامج <strong>افتراضي</strong> مجاني ومفتوح المصدر من شركة Oracle. يسمح بإنشاء وتشغيل أجهزة افتراضية على جهازك.</p>
+
+<h2>3.2 لماذا VirtualBox؟</h2>
+<div class="table-wrap">
+<table>
+  <tr><th>الميزة</th><th>التفصيل</th></tr>
+  <tr><td>مجاني تمامًا</td><td>مفتوح المصدر تحت رخصة GPL</td></tr>
+  <tr><td>متعدد المنصات</td><td>Windows، Linux، macOS</td></tr>
+  <tr><td>سهل للمبتدئين</td><td>واجهة رسومية بسيطة</td></tr>
+  <tr><td>مجتمع ضخم</td><td>دعم ومصادر لا نهائية</td></tr>
+  <tr><td>يدعم أنظمة كثيرة</td><td>Windows، Linux، BSD، Solaris</td></tr>
+</table>
+</div>
+
+<h2>3.3 التحميل من المصدر الرسمي</h2>
+<p>الرابط الرسمي الوحيد الموثوق:</p>
+<p><a href="https://www.virtualbox.org/wiki/Downloads" target="_blank" rel="noopener">https://www.virtualbox.org/wiki/Downloads</a></p>
+
+<div class="warning">
+  <strong>⚠️ تحذير أمني:</strong> لا تنزّل VirtualBox من مواقع عشوائية. استخدم الرابط الرسمي فقط.
+</div>
+
+<h2>3.4 التثبيت على Windows</h2>
+<ol>
+  <li>اذهب إلى الرابط الرسمي أعلاه</li>
+  <li>اختر <code>Windows hosts</code> لتنزيل ملف <code>.exe</code></li>
+  <li>شغّل ملف التثبيت</li>
+  <li>اتبع التعليمات (Next → Next → Install)</li>
+  <li>بعد التثبيت، ستظهر أيقونة VirtualBox في قائمة Start</li>
+</ol>
+
+<div class="tip">
+  <strong>💡 نصيحة:</strong> نزّل أيضًا <strong>VirtualBox Extension Pack</strong> من نفس الصفحة لدعم USB 2.0/3.0.
+</div>
+
+<h2>3.5 مكونات VirtualBox</h2>
+<ul>
+  <li><strong>VirtualBox Manager:</strong> الواجهة الرسومية</li>
+  <li><strong>VBoxManage:</strong> أداة سطر أوامر للأتمتة</li>
+  <li><strong>VBoxSDL:</strong> واجهة بسيطة</li>
+  <li><strong>Extension Pack:</strong> حزمة إضافات اختيارية</li>
+</ul>
+
+<hr class="chapter-divider">
+
+<h1 id="ch4">الفصل 4: إنشاء أول جهاز افتراضي من الصفر</h1>
+
+<h2>4.1 الخطوات التفصيلية</h2>
+
+<p><strong>1. افتح VirtualBox</strong> — ستظهر الواجهة الرئيسية.</p>
+<p><strong>2. اضغط New (جديد)</strong> — يبدأ معالج الإنشاء.</p>
+<p><strong>3. أدخل الاسم</strong> — مثلًا: <code>Windows 11 VM</code>.</p>
+<p><strong>4. اختر النوع</strong> — Type: <code>Microsoft Windows</code>، Version: <code>Windows 11 (64-bit)</code>.</p>
+<p><strong>5. حدد الذاكرة (RAM)</strong> — 4GB كحد أدنى، 8GB مثالي.</p>
+<p><strong>6. حدد المعالج (CPU)</strong> — 2 إلى 4 أنوية.</p>
+<p><strong>7. أنشئ قرصًا افتراضيًا</strong>:</p>
+<ul>
+  <li>اختر <code>Create a Virtual Hard Disk Now</code></li>
+  <li>النوع: <code>VDI (VirtualBox Disk Image)</code></li>
+  <li>الحجم: <code>80GB</code> مع Dynamic Allocation</li>
+</ul>
+<p><strong>8. اربط ملف ISO</strong> — من Settings → Storage، اختر ملف ISO.</p>
+<p><strong>9. اضغط Start</strong> — يبدأ التثبيت.</p>
+<p><strong>10. اتبع خطوات التثبيت</strong> كأنك تثبته على جهاز حقيقي.</p>
+<p><strong>11. ثبّت Guest Additions</strong> — من Devices → Insert Guest Additions CD Image.</p>
+<p><strong>12. أعد التشغيل</strong> — بعد التثبيت، الـVM جاهز.</p>
+
+<h2>4.2 الفرق بين البرامج على Host وGuest</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>السؤال</th><th>الإجابة</th></tr>
+  <tr><td>إذا ثبّت Chrome داخل VM، هل يظهر على سطح المكتب الحقيقي؟</td><td><strong>لا</strong> — معزول</td></tr>
+  <tr><td>إذا حذفت Chrome من VM، هل يتأثر على الـHost؟</td><td><strong>لا</strong> — مستقلان</td></tr>
+  <tr><td>هل الملفات مشتركة؟</td><td>فقط مع <strong>Shared Folders</strong></td></tr>
+  <tr><td>هل الـVM يستهلك موارد الـHost؟</td><td><strong>نعم</strong> — RAM، CPU، Disk</td></tr>
+</table>
+</div>
+
+<hr class="chapter-divider">
+<h1 id="ch5">الفصل 5: تثبيت البرامج داخل الجهاز الافتراضي</h1>
+
+<h2>5.1 هل أستطيع تثبيت أي برنامج؟</h2>
+<p><strong>نعم.</strong> داخل الـVM يمكنك تثبيت أي برنامج كما لو كنت على جهاز حقيقي:</p>
+<ul>
+  <li>Chrome / Firefox</li>
+  <li>VS Code</li>
+  <li>Node.js</li>
+  <li>Git</li>
+  <li>MongoDB</li>
+  <li>ألعاب (قد تعمل ببطء)</li>
+  <li>أدوات برمجة</li>
+  <li>برامج اختبار</li>
+  <li>برامج غير موثوقة (هنا تكمن الفائدة!)</li>
+</ul>
+
+<h2>5.2 مثال عملي</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>البيئة</th><th>المحتوى</th></tr>
+  <tr><td><strong>Windows الحقيقي (Host)</strong></td><td>VS Code + ملفات Nexmart الأصلية</td></tr>
+  <tr><td><strong>Windows VM</strong></td><td>برنامج تجريبي غير موثوق</td></tr>
+</table>
+</div>
+
+<h2>5.3 متى تحتاج VM فعلًا؟</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>الحالة</th><th>هل تحتاج VM؟</th></tr>
+  <tr><td>تتعلم Node.js لأول مرة</td><td><strong>لا</strong> — ابدأ على جهازك</td></tr>
+  <tr><td>تريد تجربة Linux</td><td><strong>نعم</strong> — VM مثالية</td></tr>
+  <tr><td>اختبار MongoDB بإعدادات مختلفة</td><td><strong>نعم</strong> — عزل أفضل</td></tr>
+  <tr><td>مشروع Nexmart في طور التطوير</td><td>ليس بالضرورة</td></tr>
+  <tr><td>محاكاة بيئة إنتاج (Production)</td><td><strong>نعم</strong> — VM أو Docker</td></tr>
+</table>
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch6">الفصل 6: Snapshots والنسخ الاحتياطي</h1>
+
+<h2>6.1 ما هو Snapshot؟</h2>
+<p><strong>Snapshot (لقطة)</strong> هي صورة لحالة الـVM في لحظة معينة. مثل "حفظ اللعبة" — يمكنك العودة إليها لاحقًا.</p>
+
+<div class="note">
+  <strong>🎮 تشبيه:</strong> تخيل أنك تلعب لعبة صعبة. وصلت إلى مستوى متقدم، وحفظت. بعد ذلك خسرت. ماذا تفعل؟ تُحمّل الحفظ السابق. الـSnapshot هي بالضبط هذا — لكن لجهاز افتراضي كامل.
+</div>
+
+<h3>مثال عملي:</h3>
+<ol>
+  <li>أنشأت Windows VM نظيفة.</li>
+  <li>أخذت Snapshot باسم <code>Clean Windows</code>.</li>
+  <li>ثبّتت 20 برنامجًا وخرب النظام.</li>
+  <li>عملت <strong>Restore</strong> → عاد النظام إلى الحالة النظيفة في ثوانٍ!</li>
+</ol>
+
+<h2>6.2 الفرق بين Snapshot وBackup</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>الميزة</th><th>Snapshot</th><th>Backup</th></tr>
+  <tr><td>ماذا يفعل؟</td><td>يحفظ حالة الـVM مؤقتًا</td><td>ينسخ الـVM بالكامل</td></tr>
+  <tr><td>أين يُخزّن؟</td><td>بجانب ملفات الـVM</td><td>في مكان منفصل</td></tr>
+  <tr><td>الغرض</td><td>تراجع سريع</td><td>استعادة بعد كارثة</td></tr>
+  <tr><td>المدة</td><td>قصيرة المدى</td><td>طويلة المدى</td></tr>
+  <tr><td>يحمي من تلف القرص؟</td><td><strong>لا</strong></td><td><strong>نعم</strong></td></tr>
+</table>
+</div>
+
+<div class="danger">
+  <strong>🚨 خطأ شائع:</strong> الاعتقاد أن Snapshot بديل عن Backup. لو تلف القرص الصلب، يضيع الـSnapshot معه.
+</div>
+
+<h2>6.3 الفرق بين Snapshot وClone وExport وImport</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>العملية</th><th>الوصف</th></tr>
+  <tr><td><strong>Snapshot</strong></td><td>صورة لحالة الـVM في لحظة</td></tr>
+  <tr><td><strong>Restore</strong></td><td>العودة إلى Snapshot سابقة</td></tr>
+  <tr><td><strong>Clone</strong></td><td>نسخة كاملة مستقلة من الـVM</td></tr>
+  <tr><td><strong>Backup</strong></td><td>نسخة كاملة تُخزّن خارجيًا</td></tr>
+  <tr><td><strong>Export</strong></td><td>تصدير كملف OVF/OVA</td></tr>
+  <tr><td><strong>Import</strong></td><td>استيراد ملف OVF/OVA</td></tr>
+</table>
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch7">الفصل 7: الشبكات داخل الأجهزة الافتراضية</h1>
+
+<h2>7.1 المفاهيم الأساسية</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>المصطلح</th><th>الشرح</th></tr>
+  <tr><td><strong>Network</strong></td><td>مجموعة أجهزة متصلة</td></tr>
+  <tr><td><strong>IP Address</strong></td><td>عنوان رقمي فريد لكل جهاز</td></tr>
+  <tr><td><strong>Private IP</strong></td><td>عنوان داخلي (192.168.x.x)</td></tr>
+  <tr><td><strong>Public IP</strong></td><td>العنوان الذي تراه المواقع</td></tr>
+  <tr><td><strong>Router</strong></td><td>يوجّه البيانات بين الشبكات</td></tr>
+  <tr><td><strong>MAC Address</strong></td><td>عنوان فريد لبطاقة الشبكة</td></tr>
+  <tr><td><strong>DNS</strong></td><td>يترجم أسماء المواقع إلى IP</td></tr>
+  <tr><td><strong>Gateway</strong></td><td>بوابة الخروج من الشبكة</td></tr>
+</table>
+</div>
+
+<h2>7.2 أوضاع الشبكة في VirtualBox</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>الوضع</th><th>الإنترنت</th><th>Host</th><th>VM↔VM</th><th>الاستخدام</th></tr>
+  <tr><td><strong>NAT</strong></td><td>✅</td><td>❌</td><td>❌</td><td>تصفح بسهولة</td></tr>
+  <tr><td><strong>NAT Network</strong></td><td>✅</td><td>✅</td><td>✅</td><td>شبكة متعددة</td></tr>
+  <tr><td><strong>Bridged</strong></td><td>✅</td><td>✅</td><td>✅</td><td>VM كجهاز مستقل</td></tr>
+  <tr><td><strong>Host-only</strong></td><td>❌</td><td>✅</td><td>✅</td><td>شبكة معزولة</td></tr>
+  <tr><td><strong>Internal</strong></td><td>❌</td><td>❌</td><td>✅</td><td>عزل تام</td></tr>
+</table>
+</div>
+
+<h2>7.3 مثال: كيف يعمل NAT؟</h2>
+
+<div class="diagram">
+  <div class="box accent">Internet</div>
+  <div class="arrow">↓</div>
+  <div class="box">Router</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">Host (192.168.1.10)</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">NAT Engine</div>
+  <div class="arrow">↓</div>
+  <div class="box">VM (10.0.2.15)</div>
+</div>
+
+<p>المواقع على الإنترنت ترى <strong>Public IP</strong> الخاص باتصال الإنترنت، وليس IP الـVM.</p>
+
+<div class="quiz">
+  <h3>🧠 اختبر فهمك</h3>
+  <details>
+    <summary>س1: ما الفرق بين NAT وBridged؟</summary>
+    <p>NAT يجعل الـVM خلف الـHost — لا يمكن الوصول إليها من الخارج. Bridged يجعل الـVM جهازًا مستقلًا بIP خاص.</p>
+  </details>
+  <details>
+    <summary>س2: متى تستخدم Internal Network؟</summary>
+    <p>عندما تريد شبكة معزولة تمامًا بين VM1 وVM2 فقط.</p>
+  </details>
+</div>
+
+<hr class="chapter-divider">
+<h1 id="ch8">الفصل 8: IP وMAC ومعلومات الجهاز</h1>
+
+<h2>8.1 ما الذي يتغير عند إنشاء VM جديدة؟</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>المعلومة</th><th>يتغير؟</th><th>ملاحظات</th></tr>
+  <tr><td>Private IP</td><td>✅</td><td>كل VM لها IP مختلف</td></tr>
+  <tr><td>MAC Address</td><td>✅</td><td>يمكن تخصيصه يدويًا</td></tr>
+  <tr><td>Computer Name</td><td>✅</td><td>يمكن تغييره</td></tr>
+  <tr><td>Operating System</td><td>✅</td><td>حسب الـISO</td></tr>
+  <tr><td>Public IP</td><td>❌</td><td>يبقى نفسه</td></tr>
+  <tr><td>Browser User-Agent</td><td>✅</td><td>يتبع نظام التشغيل</td></tr>
+  <tr><td>Screen Resolution</td><td>✅</td><td>حسب الإعدادات</td></tr>
+</table>
+</div>
+
+<h2>8.2 تغيير IP الداخلي ≠ تغيير Public IP</h2>
+
+<p>تغيير IP الداخلي للـVM <strong>لا يغيّر</strong> الـPublic IP الذي تراه المواقع. لتغيير عنوان الخروج للإنترنت:</p>
+
+<ul>
+  <li><strong>VPN</strong> (شبكة افتراضية خاصة)</li>
+  <li><strong>Proxy</strong> (وسيط)</li>
+  <li>شبكة Wi-Fi مختلفة</li>
+  <li>Router مختلف</li>
+</ul>
+
+<div class="note">
+  <strong>ملاحظة:</strong> هذا الفصل للفهم فقط — ليس دعوة للتخفي أو تجاوز القانون.
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch9">الفصل 9: العزل الأمني</h1>
+
+<h2>9.1 ماذا يحدث إذا دخل Malware إلى VM؟</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>السيناريو</th><th>النتيجة</th></tr>
+  <tr><td>فيروس ينسخ ملفات داخل VM</td><td>يبقى داخل VM</td></tr>
+  <tr><td>فيروس يحذف ملفات النظام</td><td>يؤثر على Windows داخل VM فقط</td></tr>
+  <tr><td>فيروس يحاول الاتصال بالإنترنت</td><td>يمر عبر NAT</td></tr>
+  <tr><td>استغلال Shared Folders</td><td><strong>قد يصل</strong> لملفات الـHost</td></tr>
+</table>
+</div>
+
+<h2>9.2 VM Escape</h2>
+
+<p><strong>VM Escape</strong> هو ثغرة تسمح لبرنامج داخل الـVM بالخروج والسيطرة على الـHost. هذه الثغرات <strong>نادرة</strong> لكنها موجودة (مثل CVE-2025-22226 في VirtualBox).</p>
+
+<div class="warning">
+  <strong>⚠️ تنبيه:</strong> هذا لا يعني أن VM غير آمنة. توفر عزلًا قويًا جدًا، لكنها ليست جدارًا سحريًا بنسبة 100%.
+</div>
+
+<h2>9.3 الميزات التي تقلل العزل</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>الميزة</th><th>الفائدة</th><th>تقلل العزل؟</th><th>متى؟</th></tr>
+  <tr><td>Shared Folders</td><td>مشاركة ملفات</td><td>✅ نعم</td><td>عند الحاجة فقط</td></tr>
+  <tr><td>Clipboard Sharing</td><td>نسخ ولصق</td><td>✅ نعم</td><td>للاستخدام العادي</td></tr>
+  <tr><td>USB Passthrough</td><td>توصيل USB</td><td>✅ نعم</td><td>عند الحاجة</td></tr>
+  <tr><td>Port Forwarding</td><td>فتح منافذ</td><td>✅ نعم</td><td>لتشغيل سيرفر</td></tr>
+  <tr><td>Guest Additions</td><td>تحسين الأداء</td><td>⚠️ قليلًا</td><td>دائمًا</td></tr>
+</table>
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch10">الفصل 10: Windows Sandbox</h1>
+
+<p><strong>Windows Sandbox</strong> هي بيئة مؤقتة مدمجة في Windows 10/11 Pro وEnterprise. تشبه VM لكنها تُدمَّر بالكامل عند إغلاقها.</p>
+
+<h2>الفرق بين VirtualBox VM وWindows Sandbox</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>الميزة</th><th>VirtualBox VM</th><th>Windows Sandbox</th></tr>
+  <tr><td>التثبيت</td><td>منفصل</td><td>مدمج</td></tr>
+  <tr><td>النظام</td><td>أي نظام</td><td>Windows فقط</td></tr>
+  <tr><td>التغييرات</td><td>دائمة</td><td>مؤقتة</td></tr>
+  <tr><td>الموارد</td><td>قابلة للتخصيص</td><td>تلقائي</td></tr>
+  <tr><td>الاستخدام</td><td>مشاريع طويلة</td><td>تجربة سريعة</td></tr>
+</table>
+</div>
+
+<div class="tip">
+  <strong>💡 متى تستخدم Sandbox؟</strong> عندما تريد تجربة برنامج لا تثق به بسرعة.
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch11">الفصل 11: أجهزة افتراضية متعددة وNested Virtualization</h1>
+
+<h2>11.1 VM1 + VM2 + VM3</h2>
+<p>يمكنك تشغيل أكثر من VM في نفس الوقت — بشرط أن يتحمل جهازك. كل VM معزولة.</p>
+
+<div class="diagram horizontal">
+  <div class="box accent">Host</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">VM1</div>
+  <div class="box soft">VM2</div>
+  <div class="box soft">VM3</div>
+</div>
+
+<h2>11.2 Nested Virtualization</h2>
+<p><strong>Nested Virtualization</strong> تعني تشغيل VM داخل VM.</p>
+
+<div class="diagram">
+  <div class="box accent">Host</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">VirtualBox</div>
+  <div class="arrow">↓</div>
+  <div class="box">VM1</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">VirtualBox داخل VM1</div>
+  <div class="arrow">↓</div>
+  <div class="box">VM2</div>
+</div>
+
+<ul>
+  <li><strong>هل يمكن؟</strong> نعم — VirtualBox يدعم ذلك.</li>
+  <li><strong>لماذا أبطأ؟</strong> كل طبقة تضيف overhead.</li>
+  <li><strong>المتطلبات:</strong> معالج يدعم Virtualization.</li>
+  <li><strong>للمبتدئين؟</strong> لا ننصح به — معقد وبطيء.</li>
+</ul>
+
+<hr class="chapter-divider">
+<h1 id="ch12">الفصل 12: الأجهزة الافتراضية للبرمجة</h1>
+
+<h2>لماذا Linux VM كمبرمج Backend؟</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>الفائدة</th><th>الشرح</th></tr>
+  <tr><td>بيئة إنتاج حقيقية</td><td>معظم السيرفرات تعمل بـLinux</td></tr>
+  <tr><td>فهم الأوامر</td><td>apt، systemctl، chmod</td></tr>
+  <tr><td>عزل المشروع</td><td>بيئة نظيفة لـNexmart</td></tr>
+  <tr><td>اختبار النشر</td><td>محاكاة السيرفر الحقيقي</td></tr>
+  <tr><td>Snapshots</td><td>لقطة قبل تجربة كبيرة</td></tr>
+</table>
+</div>
+
+<h2>متى تكون VM غير ضرورية؟</h2>
+<ul>
+  <li>في مرحلة تعلم Node.js الأساسية.</li>
+  <li>إذا كنت تستخدم Docker.</li>
+  <li>إذا كان جهازك أقل من 8GB RAM.</li>
+</ul>
+
+<hr class="chapter-divider">
+
+<h1 id="ch13">الفصل 13: الأجهزة الافتراضية وNexmart</h1>
+
+<h2>سيناريو عملي</h2>
+
+<div class="diagram">
+  <div class="box accent">HOST WINDOWS</div>
+  <div class="arrow">↓</div>
+  <div class="box">Nexmart Development</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">VM (Ubuntu)</div>
+  <div class="arrow">↓</div>
+  <div class="box">Node.js + Express + MongoDB</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">API</div>
+  <div class="arrow">↓</div>
+  <div class="box">Postman (على Host)</div>
+</div>
+
+<h2>لماذا Ubuntu VM لمشروع Nexmart؟</h2>
+
+<ol>
+  <li><strong>فهم Linux:</strong> التعامل مع سيرفر حقيقي.</li>
+  <li><strong>اختبار MongoDB:</strong> يختلف عن Windows.</li>
+  <li><strong>عزل التجارب:</strong> جرّب دون خوف.</li>
+  <li><strong>Snapshot قبل الترقية:</strong> قبل تحديث Node.js.</li>
+  <li><strong>محاكاة Production:</strong> بيئة تشبه السيرفر الحقيقي.</li>
+</ol>
+
+<h2>هل تحتاج VM الآن؟</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>المرحلة</th><th>التوصية</th></tr>
+  <tr><td>تتعلم أساسيات Node.js</td><td><strong>لا</strong> — ركز على البرمجة</td></tr>
+  <tr><td>مشروع Nexmart محلي</td><td>ربما — لتجربة Linux</td></tr>
+  <tr><td>تستعد للنشر على سيرفر</td><td><strong>نعم</strong></td></tr>
+  <tr><td>تريد تعلم DevOps</td><td><strong>نعم</strong></td></tr>
+</table>
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch14">الفصل 14: مختبرات الأمن السيبراني</h1>
+
+<div class="danger">
+  <strong>🚨 قاعدة أساسية:</strong> كل الاختبارات الأمنية يجب أن تكون على <strong>أنظمة تملكها</strong> أو <strong>لديك تصريح مكتوب</strong> لاختبارها.
+</div>
+
+<h2>مكونات المختبر النموذجي</h2>
+
+<div class="diagram">
+  <div class="box accent">VM1 = Attacker (Kali Linux)</div>
+  <div class="arrow">↕</div>
+  <div class="box soft">Internal Network معزولة</div>
+  <div class="arrow">↕</div>
+  <div class="box accent">VM2 = Target (Metasploitable)</div>
+</div>
+
+<h2>لماذا هذا أفضل من التجربة على أجهزة حقيقية؟</h2>
+<ol>
+  <li><strong>آمن:</strong> إذا خرب شيء، احذف الـVM وأعد إنشاءها.</li>
+  <li><strong>قانوني:</strong> كل شيء داخل بيئتك.</li>
+  <li><strong>قابل للتكرار:</strong> Snapshots.</li>
+  <li><strong>تعليمي:</strong> رؤية كل خطوة.</li>
+</ol>
+
+<h2>مجالات الاستخدام الشرعي</h2>
+<div class="table-wrap">
+<table>
+  <tr><th>المجال</th><th>الوصف</th></tr>
+  <tr><td>Malware Analysis</td><td>تحليل البرمجيات الخبيثة في بيئة معزولة</td></tr>
+  <tr><td>Digital Forensics</td><td>تحليل الأدلة الرقمية</td></tr>
+  <tr><td>Penetration Testing</td><td>اختبار الاختراق بتصريح</td></tr>
+  <tr><td>CTF</td><td>مسابقات Capture The Flag</td></tr>
+  <tr><td>Network Security</td><td>دراسة بروتوكولات الشبكة</td></tr>
+</table>
+</div>
+
+<hr class="chapter-divider">
+<h1 id="ch15">الفصل 15: Tor وDark Web — توعية</h1>
+
+<h2>15.1 ما هو Tor؟</h2>
+<p><strong>Tor (The Onion Router)</strong> هو شبكة توجيه بصلية تسمح بتصفح الإنترنت بشكل مجهول نسبيًا.</p>
+
+<h2>15.2 كيف يعمل Onion Routing؟</h2>
+<ol>
+  <li>يختار المستخدم مسارًا من 3 عقد (Nodes).</li>
+  <li>يتم تشفير البيانات في 3 طبقات (مثل البصلة).</li>
+  <li>كل عقدة تفك طبقة واحدة فقط.</li>
+  <li>العقدة الأخيرة (Exit Node) ترى الوجهة النهائية.</li>
+</ol>
+
+<h2>15.3 الفرق بين Surface Web وDeep Web وDark Web</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>الطبقة</th><th>الوصف</th><th>مثال</th></tr>
+  <tr><td><strong>Surface Web</strong></td><td>ما تصل إليه محركات البحث</td><td>Google، YouTube</td></tr>
+  <tr><td><strong>Deep Web</strong></td><td>محتوى محمي بكلمة مرور</td><td>بريدك، حسابك البنكي</td></tr>
+  <tr><td><strong>Dark Web</strong></td><td>شبكات مخفية</td><td>مواقع .onion</td></tr>
+</table>
+</div>
+
+<div class="note">
+  <strong>مهم:</strong> Dark Web ليس كله جرائم. هناك صحفيون، ناشطون، وأشخاص يبحثون عن الخصوصية.
+</div>
+
+<h2>15.4 VM + Tor — منظور معماري</h2>
+
+<div class="diagram">
+  <div class="box accent">Host Computer</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">Virtual Machine</div>
+  <div class="arrow">↓</div>
+  <div class="box">Tor Browser</div>
+  <div class="arrow">↓</div>
+  <div class="box soft">Tor Network</div>
+  <div class="arrow">↓</div>
+  <div class="box">Internet</div>
+</div>
+
+<div class="danger">
+  <strong>🚨 تحذير:</strong> هذا الكتاب لا يقدم تعليمات لارتكاب جرائم أو إخفاء هوية إجرامية. الهدف هو الفهم والتوعية. لا يوجد نظام يجعل الشخص مجهولًا 100%.
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch16">الفصل 16: مخاطر الانخراط في الجرائم الإلكترونية</h1>
+
+<div class="table-wrap">
+<table>
+  <tr><th>المخاطرة</th><th>الشرح</th></tr>
+  <tr><td>Malware</td><td>برامج خبيثة تدمر جهازك</td></tr>
+  <tr><td>Ransomware</td><td>تشفير ملفاتك وطلب فدية</td></tr>
+  <tr><td>Credential Theft</td><td>سرقة كلمات المرور</td></tr>
+  <tr><td>Scams</td><td>احتيال مالي</td></tr>
+  <tr><td>Identity Theft</td><td>سرقة هويتك</td></tr>
+  <tr><td>Blackmail</td><td>ابتزاز</td></tr>
+  <tr><td>Financial Loss</td><td>خسارة مالية</td></tr>
+  <tr><td>Legal Consequences</td><td>سجن، غرامات</td></tr>
+  <tr><td>Digital Evidence</td><td>الشرطة تستطيع تتبعك</td></tr>
+  <tr><td>Social Engineering</td><td>التلاعب النفسي</td></tr>
+  <tr><td>Psychological</td><td>قلق، اكتئاب، فقدان الثقة</td></tr>
+  <tr><td>فقدان المستقبل</td><td>سجل جنائي يمنعك من العمل</td></tr>
+</table>
+</div>
+
+<div class="note">
+  <strong>الخلاصة:</strong> التكنولوجيا ليست جريمة. الجريمة هي استخدامها في نشاط غير قانوني.
+</div>
+
+<hr class="chapter-divider">
+
+<h1 id="ch17">الفصل 17: مشروع المختبر العملي</h1>
+
+<h2>"ابنِ أول مختبر افتراضي لك"</h2>
+
+<p><strong>الهدف:</strong> إنشاء مختبر آمن لتعلم Linux والشبكات والبرمجة.</p>
+
+<p><strong>المكونات:</strong></p>
+<ul>
+  <li><strong>Host:</strong> Windows</li>
+  <li><strong>VM1:</strong> Ubuntu</li>
+  <li><strong>VM2:</strong> Ubuntu (اختياري)</li>
+</ul>
+
+<p><strong>الخطوات:</strong></p>
+<ol>
+  <li>إنشاء VM1 → تثبيت Ubuntu</li>
+  <li>إنشاء VM2 → تثبيت Ubuntu</li>
+  <li>ضبط NAT للـVM1 (للإنترنت)</li>
+  <li>إنشاء Host-only Network بين VM1 وVM2</li>
+  <li>تثبيت البرامج: Node.js، Git، VS Code (عبر SSH)</li>
+  <li>أخذ Snapshot باسم <code>Base Setup</code></li>
+  <li>اختبار الاتصال: ping بين VM1 وVM2</li>
+  <li>إيقاف الشبكة: جرّب قطع الاتصال</li>
+  <li>استعادة Snapshot: ارجع للحالة النظيفة</li>
+  <li>حذف VM بأمان</li>
+</ol>
+
+<div class="tip">
+  <strong>✅ هذا المشروع تعليمي وقانوني بالكامل.</strong>
+</div>
+
+<hr class="chapter-divider">
+  <h1 id="ch18">الفصل 18: الأخطاء الشائعة للمبتدئين</h1>
+
+  <h2>أخطاء لا ترتكبها</h2>
+
+  <div class="danger">
+    <ul>
+      <li>❌ إعطاء VM وصولًا كاملًا لملفات Host دون حاجة</li>
+      <li>❌ استخدام Shared Folder مع ملفات حساسة</li>
+      <li>❌ استخدام Bridged Networking بدون فهمه</li>
+      <li>❌ توصيل USB غير موثوق بالـVM</li>
+      <li>❌ الاعتقاد أن VM = حماية 100%</li>
+      <li>❌ الاعتقاد أن VPN = مجهول 100%</li>
+      <li>❌ الاعتقاد أن Tor = مجهول 100%</li>
+      <li>❌ تشغيل ملفات مشبوهة مع تعطيل الحماية</li>
+      <li>❌ عدم تحديث VirtualBox</li>
+      <li>❌ عدم تحديث Guest OS</li>
+      <li>❌ حفظ كلمات مرور حساسة في بيئة اختبار</li>
+      <li>❌ الخلط بين Snapshot وBackup</li>
+    </ul>
+  </div>
+
+  <hr class="chapter-divider">
+
+  <h1 id="ch19">الفصل 19: الأسئلة الشائعة (FAQ)</h1>
+
+  <div class="faq-item"><div class="q">هل يمكن للفيروس الخروج من VM؟</div><div class="a">نادرًا جدًا — فقط عبر ثغرة VM Escape.</div></div>
+  <div class="faq-item"><div class="q">هل VM تغير IP؟</div><div class="a">تغيّر Private IP — لا Public IP.</div></div>
+  <div class="faq-item"><div class="q">هل VM تغير الجهاز؟</div><div class="a">تغيّر بعض المعلومات — لكن ليس كلها.</div></div>
+  <div class="faq-item"><div class="q">هل VM تجعلني مجهولًا؟</div><div class="a">لا — العزل ≠ الإخفاء.</div></div>
+  <div class="faq-item"><div class="q">هل يمكن تشغيل أكثر من VM؟</div><div class="a">نعم — بشرط كفاية الموارد.</div></div>
+  <div class="faq-item"><div class="q">هل يمكن VM داخل VM؟</div><div class="a">نعم — Nested Virtualization. لكنها أبطأ.</div></div>
+  <div class="faq-item"><div class="q">هل الألعاب تعمل؟</div><div class="a">بعضها — قد يكون الأداء ضعيفًا.</div></div>
+  <div class="faq-item"><div class="q">هل يمكن استخدام VM للبرمجة؟</div><div class="a">نعم — ممتازة لـLinux والتطوير.</div></div>
+  <div class="faq-item"><div class="q">هل أحتاج VM لـNexmart؟</div><div class="a">ليس بالضرورة الآن — مفيدة مستقبلًا.</div></div>
+  <div class="faq-item"><div class="q">هل VirtualBox مجاني؟</div><div class="a">نعم — مجاني ومفتوح المصدر.</div></div>
+  <div class="faq-item"><div class="q">ما الفرق بين VM وSandbox؟</div><div class="a">VM دائمة — Sandbox مؤقتة.</div></div>
+  <div class="faq-item"><div class="q">ما الفرق بين VM وVPN؟</div><div class="a">VM = كمبيوتر كامل. VPN = نفق شبكة.</div></div>
+  <div class="faq-item"><div class="q">هل Dark Web كله جرائم؟</div><div class="a">لا — لكنه يحتوي نشاطًا غير قانوني.</div></div>
+  <div class="faq-item"><div class="q">هل استخدام Tor قانوني؟</div><div class="a">نعم — لكن استخدامه في جريمة غير قانوني.</div></div>
+  <div class="faq-item"><div class="q">هل Snapshot Backup؟</div><div class="a">لا — Snapshot للتراجع السريع فقط.</div></div>
+  <div class="faq-item"><div class="q">هل يمكن نقل VM إلى جهاز آخر؟</div><div class="a">نعم — عبر Export/Import.</div></div>
+
+  <hr class="chapter-divider">
+
+  <h1 id="glossary">قاموس المصطلحات</h1>
+
+  <div class="table-wrap">
+  <table>
+    <tr><th>المصطلح</th><th>الترجمة</th><th>الشرح</th><th>مثال</th></tr>
+    <tr><td>Virtual Machine</td><td>الجهاز الافتراضي</td><td>كمبيوتر محاكى</td><td>Ubuntu VM</td></tr>
+    <tr><td>Host</td><td>المضيف</td><td>الكمبيوتر الحقيقي</td><td>Laptop Windows</td></tr>
+    <tr><td>Guest</td><td>الضيف</td><td>نظام داخل VM</td><td>Windows 11 في VM</td></tr>
+    <tr><td>Hypervisor</td><td>مدير VM</td><td>برنامج يدير VM</td><td>VirtualBox</td></tr>
+    <tr><td>Virtualization</td><td>الافتراضية</td><td>تشغيل أنظمة متعددة</td><td>Linux وWindows</td></tr>
+    <tr><td>Snapshot</td><td>لقطة</td><td>صورة لحالة VM</td><td>Clean Windows</td></tr>
+    <tr><td>Clone</td><td>نسخة</td><td>نسخة كاملة</td><td>نسخة احتياطية</td></tr>
+    <tr><td>ISO</td><td>ملف صورة</td><td>ملف نظام التشغيل</td><td>Windows11.iso</td></tr>
+    <tr><td>NAT</td><td>ترجمة عنوان</td><td>وضع شبكة</td><td>VM → Host → Internet</td></tr>
+    <tr><td>Bridged</td><td>الجسر</td><td>VM كجهاز مستقل</td><td>IP من الراوتر</td></tr>
+    <tr><td>Host-only</td><td>المضيف فقط</td><td>شبكة معزولة</td><td>VM ↔ Host</td></tr>
+    <tr><td>Internal Network</td><td>الشبكة الداخلية</td><td>بين VMs فقط</td><td>VM1 ↔ VM2</td></tr>
+    <tr><td>Public IP</td><td>العنوان العام</td><td>IP من المزود</td><td>203.0.113.5</td></tr>
+    <tr><td>Private IP</td><td>العنوان الخاص</td><td>IP داخلي</td><td>192.168.1.10</td></tr>
+    <tr><td>MAC Address</td><td>عنوان MAC</td><td>عنوان البطاقة</td><td>00:1A:2B:3C:4D:5E</td></tr>
+    <tr><td>DNS</td><td>نظام الأسماء</td><td>يترجم الأسماء</td><td>google.com</td></tr>
+    <tr><td>Gateway</td><td>البوابة</td><td>مخرج الشبكة</td><td>192.168.1.1</td></tr>
+    <tr><td>VPN</td><td>شبكة افتراضية</td><td>نفق مشفر</td><td>NordVPN</td></tr>
+    <tr><td>Proxy</td><td>الوسيط</td><td>وسيط للإنترنت</td><td>HTTP Proxy</td></tr>
+    <tr><td>Tor</td><td>الشبكة البصلية</td><td>شبكة مجهولة</td><td>متصفح Tor</td></tr>
+    <tr><td>Dark Web</td><td>الويب المظلم</td><td>شبكات مخفية</td><td>.onion</td></tr>
+    <tr><td>Deep Web</td><td>الويب العميق</td><td>محتوى محمي</td><td>بريدك</td></tr>
+    <tr><td>Sandbox</td><td>صندوق الرمل</td><td>بيئة مؤقتة</td><td>Windows Sandbox</td></tr>
+    <tr><td>Isolation</td><td>العزل</td><td>فصل البيئات</td><td>VM معزولة</td></tr>
+    <tr><td>VM Escape</td><td>الهروب</td><td>ثغرة للخروج</td><td>CVE-2025-22226</td></tr>
+    <tr><td>Nested Virtualization</td><td>متداخلة</td><td>VM داخل VM</td><td>VM → VM</td></tr>
+    <tr><td>Firewall</td><td>الجدار الناري</td><td>يمنع الاتصالات</td><td>Windows Firewall</td></tr>
+    <tr><td>Port Forwarding</td><td>تمرير منافذ</td><td>توجيه منفذ</td><td>سيرفر VM</td></tr>
+  </table>
+  </div>
+
+  <hr class="chapter-divider">
+
+  <h1 id="summary">الخلاصة</h1>
+
+  <p>الأجهزة الافتراضية هي أداة قوية جدًا لكل من:</p>
+
+  <ul>
+    <li><strong>المبرمج:</strong> بيئة تطوير معزولة، اختبار Linux، محاكاة السيرفر.</li>
+    <li><strong>طالب الأمن السيبراني:</strong> مختبر آمن، تحليل برمجيات، دراسة الشبكات.</li>
+    <li><strong>المستخدم العادي:</strong> تجربة برامج جديدة، حماية جهازك، التعلم.</li>
+  </ul>
+
+  <div class="tip">
+    <strong>✅ المفتاح:</strong> الاستخدام المسؤول والقانوني. فهم التكنولوجيا يجعلك أكثر وعيًا وأمانًا، ويفتح لك أبوابًا جديدة في البرمجة والأمن السيبراني وDevOps.
+  </div>
+
+  <hr class="chapter-divider">
+
+  <h1 id="references">المراجع</h1>
+
+  <ol>
+    <li>Oracle VirtualBox Documentation — <a href="https://docs.oracle.com/en/virtualization/virtualbox/" target="_blank" rel="noopener">docs.oracle.com</a></li>
+    <li>VirtualBox Official — <a href="https://www.virtualbox.org/" target="_blank" rel="noopener">virtualbox.org</a></li>
+    <li>Microsoft Windows Sandbox — <a href="https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/windows-sandbox/" target="_blank" rel="noopener">learn.microsoft.com</a></li>
+    <li>Tor Project — <a href="https://www.torproject.org/" target="_blank" rel="noopener">torproject.org</a></li>
+    <li>NIST Virtualization Security Guidelines</li>
+    <li>MITRE CVE Database — <a href="https://cve.mitre.org/" target="_blank" rel="noopener">cve.mitre.org</a></li>
+  </ol>
+
+  <div class="note" style="text-align:center; margin-top:40px;">
+    <strong>نهاية الكتاب 📘</strong><br>
+    شكرًا لقراءتك. ابدأ التطبيق العملي اليوم!
+  </div>
+
+</div>
+
+<script>
+  (function() {
+    // Progress bar + Back to top
+    var progressBar = document.getElementById('progress-bar');
+    var backToTop = document.getElementById('back-to-top');
+    var raf = false;
+
+    function onScroll() {
+      if (raf) return;
+      raf = true;
+      requestAnimationFrame(function() {
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progressBar.style.width = progress + '%';
+        if (scrollTop > 400) backToTop.classList.add('show');
+        else backToTop.classList.remove('show');
+        raf = false;
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    backToTop.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Smooth scroll for TOC
+    var anchors = document.querySelectorAll('a[href^="#"]');
+    for (var i = 0; i < anchors.length; i++) {
+      anchors[i].addEventListener('click', function(e) {
+        var href = this.getAttribute('href');
+        if (href === '#') return;
+        var target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          var top = target.getBoundingClientRect().top + window.pageYOffset - 20;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        }
+      });
+    }
+
+    // Wrap tables for mobile scroll
+    var tables = document.querySelectorAll('table');
+    for (var j = 0; j < tables.length; j++) {
+      var t = tables[j];
+      if (!t.parentElement.classList.contains('table-wrap')) {
+        var wrap = document.createElement('div');
+        wrap.className = 'table-wrap';
+        t.parentNode.insertBefore(wrap, t);
+        wrap.appendChild(t);
+      }
+    }
+  })();
+</script>
+
+</body>
+</html>
